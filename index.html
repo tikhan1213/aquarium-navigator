@@ -490,6 +490,66 @@
       color: #5eead4;
     }
 
+    .planned-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: 1px solid #e2eef1;
+      border-radius: 0.9rem;
+      background: #fbfeff;
+      padding: 0.55rem 0.7rem;
+    }
+
+    .planned-name {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #0f172a;
+    }
+
+    .planned-meta {
+      flex: 0 0 auto;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #0f766e;
+    }
+
+    .planned-remove {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 1.7rem;
+      height: 1.7rem;
+      border: none;
+      border-radius: 0.5rem;
+      background: #fff1f2;
+      color: #be123c;
+      font-size: 1.05rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .planned-remove:hover {
+      background: #ffe4e6;
+    }
+
+    html[data-theme="dark"] .planned-item {
+      background: rgba(16, 31, 48, 0.9);
+      border-color: rgba(94, 234, 212, 0.16);
+    }
+
+    html[data-theme="dark"] .planned-name {
+      color: #eaf3fa;
+    }
+
+    html[data-theme="dark"] .planned-meta {
+      color: #5eead4;
+    }
+
     .assistant-card {
       display: flex;
       flex-direction: column;
@@ -2683,8 +2743,8 @@
             </div>
             <p class="mt-3 text-sm font-extrabold text-slate-700">Пока никого нет</p>
             <p class="mt-1 max-w-xs text-xs font-medium leading-5 text-slate-400">Добавьте рыб, которые уже живут в аквариуме, чтобы учесть их в расчёте.</p>
-            <button type="button" class="mt-3 text-xs font-extrabold text-teal-700 underline decoration-teal-200 decoration-2 underline-offset-4 transition hover:text-teal-900" data-add-kind="current">
-              Добавить вручную
+            <button type="button" class="mt-3 text-xs font-extrabold text-teal-700 underline decoration-teal-200 decoration-2 underline-offset-4 transition hover:text-teal-900" data-open-catalog>
+              Выбрать в каталоге
             </button>
           </div>
         </section>
@@ -2728,10 +2788,7 @@
               </svg>
             </div>
             <p class="mt-3 text-sm font-extrabold text-slate-700">Пока пусто</p>
-            <p class="mt-1 max-w-xs text-xs font-medium leading-5 text-slate-400">Добавьте рыб, которых только планируете купить. Калькулятор учтёт их объём и совместимость.</p>
-            <button type="button" class="mt-3 text-xs font-extrabold text-sky-700 underline decoration-sky-200 decoration-2 underline-offset-4 transition hover:text-sky-900" data-add-kind="planned">
-              Добавить вручную
-            </button>
+            <p class="mt-1 max-w-xs text-xs font-medium leading-5 text-slate-400">Нажмите «Подобрать население» — выберу количество под ваш объём. Или добавьте вид из каталога.</p>
           </div>
         </section>
 
@@ -3089,7 +3146,7 @@
           <div>
             <p class="eyebrow">Подбор количества</p>
             <h2 id="optimizerTitle" class="mt-1.5 text-2xl font-black tracking-[-0.035em] text-slate-900">Сколько кого можно</h2>
-            <p class="mt-1 max-w-xl text-sm font-medium leading-5 text-slate-500">Список берётся из «Планируемых обитателей». Жмите «+» у нужного вида — его количество вырастет, а у остальных уменьшится, чтобы всё влезло в объём.</p>
+            <p class="mt-1 max-w-xl text-sm font-medium leading-5 text-slate-500">Добавьте виды полем выше и жмите «+» у нужного — его количество вырастет, а у остальных уменьшится, чтобы всё влезло в объём.</p>
           </div>
         </div>
         <button type="button" class="dialog-close" data-close-dialog="optimizerDialog" aria-label="Закрыть подбор количества">
@@ -3098,14 +3155,18 @@
       </div>
 
       <div class="dialog-body">
-        <div id="optimizerList" class="space-y-2"></div>
+        <div class="flex flex-wrap gap-2">
+          <input id="optimizerAddInput" class="mini-input flex-1" list="fishSpeciesOptions" autocomplete="off" placeholder="Добавить вид: начните вводить название">
+          <button type="button" id="optimizerAddButton" class="secondary-small">Добавить в список</button>
+        </div>
+        <div id="optimizerList" class="mt-3 space-y-2"></div>
         <div id="optimizerResult" class="mt-4"></div>
         <div class="mt-4 flex flex-wrap gap-2">
           <button type="button" id="optimizerApply" class="primary-small">
             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m5 12 4.5 4.5L19 6.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             Применить к плану
           </button>
-          <button type="button" id="optimizerReset" class="secondary-small">Сбросить приоритеты</button>
+          <button type="button" id="optimizerReset" class="secondary-small">Пересчитать заново</button>
         </div>
       </div>
     </div>
@@ -4023,10 +4084,31 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         target.textContent = count + ' ' + plural(count, ['вид', 'вида', 'видов']);
       }
 
+      function buildPlannedMarkup(row) {
+        const fish = resolveFish(row);
+        if (!fish) return '';
+        const qty = clampQuantity(row.qty);
+
+        return '<div class="planned-item" data-planned-id="' + row.uid + '">' +
+          '<span class="planned-name">' + escapeHTML(fish.name) + '</span>' +
+          '<span class="planned-meta">' + qty + ' шт. · ' + formatLitres(spaceForFish(fish, qty).total) + '</span>' +
+          '<button type="button" class="planned-remove" data-remove-planned="' + row.uid + '" aria-label="Убрать ' + escapeHTML(fish.name) + '">×</button>' +
+        '</div>';
+      }
+
       function renderRows(kind) {
         const list = getRowList(kind);
         const empty = kind === 'current' ? el.currentEmpty : el.plannedEmpty;
         const rows = getRowArray(kind);
+
+        if (kind === 'planned') {
+          const filled = rows.filter(rowHasFish);
+          list.innerHTML = filled.map(buildPlannedMarkup).join('');
+          empty.hidden = filled.length > 0;
+          updateCount(kind);
+          updatePreview();
+          return;
+        }
 
         list.innerHTML = rows.map(buildRowMarkup).join('');
         empty.hidden = rows.length > 0;
@@ -6374,17 +6456,79 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
 
       let optimizerProposal = null;
       let optimizerAccepted = null;
-      const optimizerWeights = new Map();
+      let optimizerQuantities = new Map();
+      let optimizerSeedKey = '';
 
-      function optimizerWeight(fishId) {
-        if (!optimizerWeights.has(fishId)) optimizerWeights.set(fishId, 1);
-        return optimizerWeights.get(fishId);
+      function seedOptimizerQuantities(volume, currentSelection, accepted) {
+        const allocation = allocatePopulation(volume, currentSelection, accepted);
+        const map = new Map();
+
+        accepted.forEach(function (wish) {
+          const qty = allocation.quantities.get(wish.fish.id) || 0;
+          const cap = wish.fish.group > 1 ? Math.max(8, wish.fish.group * 4) : 8;
+          map.set(wish.fish.id, Math.min(qty, cap));
+        });
+
+        return map;
       }
 
-      function nudgeOptimizerWeight(fishId, direction) {
-        const current = optimizerWeight(fishId);
-        const next = direction > 0 ? Math.min(9, current * 1.45) : Math.max(0.12, current / 1.45);
-        optimizerWeights.set(fishId, next);
+      function findFishLoose(query) {
+        const normalized = String(query || '').trim().toLowerCase().replace(/ё/g, 'е');
+        if (!normalized) return null;
+
+        const exact = FISH_DB.find(function (fish) {
+          return fish.name.toLowerCase().replace(/ё/g, 'е') === normalized;
+        });
+        if (exact) return exact;
+
+        return FISH_DB.find(function (fish) {
+          const name = fish.name.toLowerCase().replace(/ё/g, 'е');
+          return name.indexOf(normalized) === 0 || name.indexOf(normalized) !== -1;
+        }) || null;
+      }
+
+      function optimizerFits(quantities, volume) {
+        const currentSelection = collectSelection('current');
+        const wishes = collectWishes();
+        const split = splitWishesByConflicts(wishes, currentSelection);
+        const merged = mergeSelection(currentSelection, split.accepted, quantities);
+        const requirement = computeRequirement(merged);
+        return requirement.required <= volume + 0.001 && requirement.totalFish <= volume * 0.6 + 0.001;
+      }
+
+      function nudgeQuantity(fishId, direction) {
+        const volume = Number(state.volume) > 0 ? Number(state.volume) : 0;
+        if (!(volume > 0)) return;
+
+        const current = optimizerQuantities.get(fishId) || 0;
+
+        if (direction > 0) {
+          if (current >= 60) return;
+          optimizerQuantities.set(fishId, current + 1);
+
+          let guard = 0;
+          while (!optimizerFits(optimizerQuantities, volume) && guard < 300) {
+            guard += 1;
+            let victim = null;
+            let victimQty = 0;
+            optimizerQuantities.forEach(function (value, key) {
+              if (key === fishId) return;
+              if (value > victimQty) {
+                victim = key;
+                victimQty = value;
+              }
+            });
+            if (!victim || victimQty <= 0) break;
+            optimizerQuantities.set(victim, victimQty - 1);
+          }
+
+          if (!optimizerFits(optimizerQuantities, volume)) {
+            optimizerQuantities.set(fishId, current);
+          }
+        } else if (current > 0) {
+          optimizerQuantities.set(fishId, current - 1);
+        }
+
         renderOptimizer();
       }
 
@@ -6543,7 +6687,7 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
           listEl.innerHTML = '';
           resultEl.innerHTML = '<div class="rounded-2xl border border-dashed border-teal-200 bg-teal-50/60 p-4 text-center">' +
             '<p class="text-sm font-extrabold text-teal-900">Список пуст</p>' +
-            '<p class="mx-auto mt-1 max-w-md text-[0.76rem] font-medium leading-5 text-teal-800/70">Добавьте рыбу в «Планируемые обитатели» — она появится здесь, и я подберу, сколько особей каждого вида влезет.</p>' +
+            '<p class="mx-auto mt-1 max-w-md text-[0.76rem] font-medium leading-5 text-teal-800/70">Добавьте вид полем выше — подберу, сколько особей влезет, и покажу это в списке.</p>' +
           '</div>';
           optimizerProposal = null;
           return;
@@ -6558,18 +6702,24 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
 
         const currentSelection = collectSelection('current');
         const split = splitWishesByConflicts(wishes, currentSelection);
-        const weighted = split.accepted.map(function (wish) {
-          return Object.assign({}, wish, { priority: optimizerWeight(wish.fish.id) });
-        });
-        const allocation = allocatePopulation(volume, currentSelection, weighted);
-        const proposal = allocation.quantities;
+
+        const seedKey = split.accepted.map(function (wish) {
+          return wish.fish.id;
+        }).join(',');
+
+        if (optimizerQuantities.size === 0 || seedKey !== optimizerSeedKey) {
+          optimizerQuantities = seedOptimizerQuantities(volume, currentSelection, split.accepted);
+          optimizerSeedKey = seedKey;
+        }
+
+        const proposal = optimizerQuantities;
         optimizerProposal = proposal;
         optimizerAccepted = split.accepted;
 
         listEl.innerHTML = split.accepted.map(function (wish) {
           const qty = proposal.get(wish.fish.id) || 0;
-          const weight = optimizerWeight(wish.fish.id);
-          const canMore = qty < 60;
+          const canDec = qty > 0;
+          const canInc = qty < 60;
 
           return '<div class="plan-item">' +
             '<div class="flex flex-wrap items-center justify-between gap-2">' +
@@ -6578,9 +6728,9 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
                 '<p class="mt-0.5 text-[0.66rem] font-semibold text-slate-400">' + LAYER_INFO[wish.layer].label + ' · ' + formatNumber(unitLitres(wish.fish)) + ' л/особь</p>' +
               '</div>' +
               '<div class="opt-stepper">' +
-                '<button type="button" class="opt-step" data-opt-dec="' + wish.fish.id + '" aria-label="Меньше особей ' + escapeHTML(wish.fish.name) + '"' + (weight <= 0.13 ? ' disabled' : '') + '>−</button>' +
+                '<button type="button" class="opt-step" data-opt-dec="' + wish.fish.id + '" aria-label="Меньше особей ' + escapeHTML(wish.fish.name) + '"' + (canDec ? '' : ' disabled') + '>−</button>' +
                 '<span class="opt-qty"><strong>' + qty + '</strong> шт.</span>' +
-                '<button type="button" class="opt-step" data-opt-inc="' + wish.fish.id + '" aria-label="Больше особей ' + escapeHTML(wish.fish.name) + '"' + (canMore ? '' : ' disabled') + '>+</button>' +
+                '<button type="button" class="opt-step" data-opt-inc="' + wish.fish.id + '" aria-label="Больше особей ' + escapeHTML(wish.fish.name) + '"' + (canInc ? '' : ' disabled') + '>+</button>' +
               '</div>' +
             '</div>' +
           '</div>';
@@ -7327,13 +7477,13 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
 
           const inc = target.closest('[data-opt-inc]');
           if (inc) {
-            nudgeOptimizerWeight(inc.getAttribute('data-opt-inc'), 1);
+            nudgeQuantity(inc.getAttribute('data-opt-inc'), 1);
             return;
           }
 
           const dec = target.closest('[data-opt-dec]');
           if (dec) {
-            nudgeOptimizerWeight(dec.getAttribute('data-opt-dec'), -1);
+            nudgeQuantity(dec.getAttribute('data-opt-dec'), -1);
           }
         });
       }
@@ -7344,12 +7494,10 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
       const optimizerReset = document.getElementById('optimizerReset');
       if (optimizerReset) {
         optimizerReset.addEventListener('click', function () {
-          optimizerWeights.clear();
-          state.planned.forEach(function (row) {
-            row.priority = 2;
-          });
+          optimizerQuantities.clear();
+          optimizerSeedKey = '';
           renderOptimizer();
-          showToast('Количество сброшено к равному');
+          showToast('Количество пересчитано заново');
         });
       }
 
@@ -7434,6 +7582,59 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
           }
         });
       }
+
+      const plannedListEl = document.getElementById('plannedList');
+      if (plannedListEl) {
+        plannedListEl.addEventListener('click', function (event) {
+          const target = event.target;
+          if (!target || !target.closest) return;
+          const remove = target.closest('[data-remove-planned]');
+          if (!remove) return;
+          const uid = remove.getAttribute('data-remove-planned');
+          state.planned = state.planned.filter(function (row) {
+            return row.uid !== uid;
+          });
+          renderRows('planned');
+          updateCurrentPlanSummary();
+          refreshResultsIfVisible();
+        });
+      }
+
+      const optimizerAddInput = document.getElementById('optimizerAddInput');
+      const optimizerAddButton = document.getElementById('optimizerAddButton');
+
+      function addFromOptimizerInput() {
+        if (!optimizerAddInput) return;
+        const query = optimizerAddInput.value.trim();
+        if (!query) return;
+        const fish = findFishLoose(query);
+        if (!fish) {
+          showToast('Не нашёл такой вид — выберите из подсказок');
+          return;
+        }
+        addSpeciesTo('planned', fish.id, fish.group > 1 ? fish.group : 1);
+        optimizerAddInput.value = '';
+        renderOptimizer();
+      }
+
+      if (optimizerAddButton) optimizerAddButton.addEventListener('click', addFromOptimizerInput);
+      if (optimizerAddInput) {
+        optimizerAddInput.addEventListener('keydown', function (event) {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            addFromOptimizerInput();
+          }
+        });
+      }
+
+      document.addEventListener('click', function (event) {
+        const target = event.target;
+        if (!target || !target.closest) return;
+        if (target.closest('[data-open-catalog]')) {
+          event.preventDefault();
+          openCatalogDialog();
+        }
+      });
 
       const assistantChips = document.getElementById('assistantChips');
       if (assistantChips) {
