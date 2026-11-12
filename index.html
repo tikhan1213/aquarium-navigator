@@ -458,6 +458,48 @@
       cursor: not-allowed;
     }
 
+    .opt-input {
+      width: 3.4rem;
+      border: 1px solid #d7ecef;
+      border-radius: 0.55rem;
+      background: #ffffff;
+      padding: 0.35rem 0.15rem;
+      text-align: center;
+      font-size: 0.88rem;
+      font-weight: 900;
+      color: #0f766e;
+      outline: none;
+      -moz-appearance: textfield;
+    }
+
+    .opt-input::-webkit-outer-spin-button,
+    .opt-input::-webkit-inner-spin-button {
+      margin: 0;
+      -webkit-appearance: none;
+    }
+
+    .opt-input:focus {
+      border-color: #2dd4bf;
+      box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.16);
+    }
+
+    .opt-unit {
+      margin-right: 0.1rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    html[data-theme="dark"] .opt-input {
+      background: #0b1826;
+      border-color: rgba(148, 163, 184, 0.28);
+      color: #5eead4;
+    }
+
+    html[data-theme="dark"] .opt-unit {
+      color: #9fb6c6;
+    }
+
     .opt-qty {
       min-width: 3.8rem;
       text-align: center;
@@ -3178,7 +3220,7 @@
           <div>
             <p class="eyebrow">Подбор количества</p>
             <h2 id="optimizerTitle" class="mt-1.5 text-2xl font-black tracking-[-0.035em] text-slate-900">Сколько кого можно</h2>
-            <p class="mt-1 max-w-xl text-sm font-medium leading-5 text-slate-500">Добавьте виды полем выше и жмите «+» у нужного — его количество вырастет, а у остальных уменьшится, чтобы всё влезло в объём.</p>
+            <p class="mt-1 max-w-xl text-sm font-medium leading-5 text-slate-500">Добавьте виды полем выше. Жмите «+» или впишите нужное число прямо в поле — у остальных видов количество уменьшится, чтобы всё влезло в объём.</p>
           </div>
         </div>
         <button type="button" class="dialog-close" data-close-dialog="optimizerDialog" aria-label="Закрыть подбор количества">
@@ -6512,6 +6554,49 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         return requirement.required <= volume + 0.001 && requirement.totalFish <= volume * 0.6 + 0.001;
       }
 
+      function setOptimizerQuantity(fishId, value) {
+        const volume = Number(state.volume) > 0 ? Number(state.volume) : 0;
+        if (!(volume > 0)) return;
+
+        const requested = Math.max(0, Math.min(60, Math.round(Number(value) || 0)));
+        const previous = optimizerQuantities.get(fishId) || 0;
+        let qty = requested;
+
+        optimizerQuantities.set(fishId, qty);
+
+        let guard = 0;
+        while (!optimizerFits(optimizerQuantities, volume) && guard < 400) {
+          guard += 1;
+          let victim = null;
+          let victimQty = 0;
+          optimizerQuantities.forEach(function (itemQty, key) {
+            if (key === fishId) return;
+            if (itemQty > victimQty) {
+              victim = key;
+              victimQty = itemQty;
+            }
+          });
+          if (!victim || victimQty <= 0) break;
+          optimizerQuantities.set(victim, victimQty - 1);
+        }
+
+        while (!optimizerFits(optimizerQuantities, volume) && qty > 0 && guard < 800) {
+          guard += 1;
+          qty -= 1;
+          optimizerQuantities.set(fishId, qty);
+        }
+
+        if (!optimizerFits(optimizerQuantities, volume)) {
+          optimizerQuantities.set(fishId, previous);
+        }
+
+        renderOptimizer();
+
+        if (qty !== requested) {
+          showToast('Столько не помещается — поставил ' + qty);
+        }
+      }
+
       function nudgeQuantity(fishId, direction) {
         const volume = Number(state.volume) > 0 ? Number(state.volume) : 0;
         if (!(volume > 0)) return;
@@ -6745,7 +6830,8 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
               '</div>' +
               '<div class="opt-stepper">' +
                 '<button type="button" class="opt-step" data-opt-dec="' + wish.fish.id + '" aria-label="Меньше особей ' + escapeHTML(wish.fish.name) + '"' + (canDec ? '' : ' disabled') + '>−</button>' +
-                '<span class="opt-qty"><strong>' + qty + '</strong> шт.</span>' +
+                '<input class="opt-input" type="number" min="0" max="60" step="1" inputmode="numeric" value="' + qty + '" data-opt-input="' + wish.fish.id + '" aria-label="Количество: ' + escapeHTML(wish.fish.name) + '">' +
+                '<span class="opt-unit">шт.</span>' +
                 '<button type="button" class="opt-step" data-opt-inc="' + wish.fish.id + '" aria-label="Больше особей ' + escapeHTML(wish.fish.name) + '"' + (canInc ? '' : ' disabled') + '>+</button>' +
               '</div>' +
             '</div>' +
@@ -6796,7 +6882,7 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
             '<ul class="mt-2">' + rows + '</ul>' +
             optimizerLayerBars(requirement, volume) +
             rejectedBlock +
-            '<p class="mt-2 text-[0.62rem] font-medium leading-4 text-slate-500">Жмите <strong>+</strong> у нужного вида: его количество вырастет за счёт остальных, не выходя за объём. <strong>−</strong> возвращает место другим. Конфликтующие виды не рассчитываются.</p>' +
+            '<p class="mt-2 text-[0.62rem] font-medium leading-4 text-slate-500">Жмите <strong>+</strong> или впишите число в поле — вид вырастет за счёт остальных, не выходя за объём. <strong>−</strong> возвращает место другим. Конфликтующие виды не рассчитываются.</p>' +
           '</div>';
       }
 
@@ -7500,6 +7586,23 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
           const dec = target.closest('[data-opt-dec]');
           if (dec) {
             nudgeQuantity(dec.getAttribute('data-opt-dec'), -1);
+          }
+        });
+
+        optimizerList.addEventListener('change', function (event) {
+          const target = event.target;
+          if (!target || !target.closest) return;
+          const input = target.closest('[data-opt-input]');
+          if (!input) return;
+          setOptimizerQuantity(input.getAttribute('data-opt-input'), input.value);
+        });
+
+        optimizerList.addEventListener('keydown', function (event) {
+          const target = event.target;
+          if (!target || !target.matches) return;
+          if (target.matches('[data-opt-input]') && event.key === 'Enter') {
+            event.preventDefault();
+            target.blur();
           }
         });
       }
