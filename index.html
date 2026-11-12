@@ -372,21 +372,290 @@
       flex: 0 0 auto;
       align-items: center;
       justify-content: center;
-      gap: 0.45rem;
-      border: 1px dashed #99f6e4;
-      border-radius: 0.9rem;
-      background: #f0fdfa;
-      padding: 0.7rem 0.9rem;
-      color: #0f766e;
-      font-size: 0.78rem;
+      gap: 0.65rem;
+      border: 1px solid rgba(13, 148, 136, 0.35);
+      border-radius: 1.05rem;
+      background: linear-gradient(135deg, #0d9488 0%, #0891b2 100%);
+      padding: 0.65rem 1rem;
+      color: #ffffff;
+      font-size: 0.8rem;
       font-weight: 800;
-      transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease;
+      box-shadow: 0 18px 34px -22px rgba(8, 145, 178, 0.85);
+      transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
     }
 
     .optimize-button:hover {
-      border-color: #2dd4bf;
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow: 0 22px 38px -20px rgba(8, 145, 178, 0.95);
+    }
+
+    .optimize-button:active {
+      transform: translateY(0);
+    }
+
+    .optimize-icon {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 0.75rem;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .optimize-title {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 850;
+      line-height: 1.15;
+    }
+
+    .optimize-sub {
+      display: block;
+      margin-top: 0.12rem;
+      font-size: 0.63rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    html[data-theme="dark"] .optimize-button {
+      box-shadow: 0 18px 34px -24px rgba(0, 0, 0, 0.9);
+    }
+
+    .opt-stepper {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      border: 1px solid #d7ecef;
+      border-radius: 0.8rem;
+      background: #ffffff;
+      padding: 0.2rem;
+    }
+
+    .opt-step {
+      display: grid;
+      place-items: center;
+      width: 1.95rem;
+      height: 1.95rem;
+      border: none;
+      border-radius: 0.55rem;
+      background: #f0fdfa;
+      color: #0f766e;
+      font-size: 1.05rem;
+      font-weight: 900;
+      line-height: 1;
+      transition: background-color 140ms ease, transform 140ms ease;
+    }
+
+    .opt-step:hover:not(:disabled) {
       background: #ccfbf1;
       transform: translateY(-1px);
+    }
+
+    .opt-step:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .opt-qty {
+      min-width: 3.8rem;
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .opt-qty strong {
+      font-size: 0.92rem;
+      font-weight: 900;
+      color: #0f766e;
+    }
+
+    html[data-theme="dark"] .opt-stepper {
+      background: #0b1826;
+      border-color: rgba(148, 163, 184, 0.28);
+    }
+
+    html[data-theme="dark"] .opt-step {
+      background: rgba(13, 62, 60, 0.7);
+      color: #5eead4;
+    }
+
+    html[data-theme="dark"] .opt-qty {
+      color: #9fb6c6;
+    }
+
+    html[data-theme="dark"] .opt-qty strong {
+      color: #5eead4;
+    }
+
+    .assistant-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(13, 148, 136, 0.14);
+      border-radius: 1.6rem;
+      background: rgba(255, 255, 255, 0.88);
+      padding: 1rem;
+      box-shadow: 0 22px 52px -44px rgba(8, 83, 98, 0.5);
+    }
+
+    .assistant-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      max-height: 32rem;
+      overflow-y: auto;
+      padding-right: 0.25rem;
+      scroll-behavior: smooth;
+    }
+
+    .msg {
+      max-width: 88%;
+      border-radius: 1rem;
+      padding: 0.6rem 0.85rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .msg-user {
+      align-self: flex-end;
+      border-bottom-right-radius: 0.35rem;
+      background: linear-gradient(135deg, #0d9488, #0891b2);
+      color: #ffffff;
+    }
+
+    .msg-bot {
+      align-self: flex-start;
+      border: 1px solid #e2f1f4;
+      border-bottom-left-radius: 0.35rem;
+      background: #f5fafb;
+      color: #334155;
+    }
+
+    .msg-bot strong {
+      color: #0f172a;
+    }
+
+    .msg-bot ul {
+      margin: 0.4rem 0 0;
+      padding-left: 1rem;
+      list-style: disc;
+    }
+
+    .msg-bot li {
+      margin-top: 0.2rem;
+    }
+
+    .msg-note {
+      display: block;
+      margin-top: 0.4rem;
+      font-size: 0.68rem;
+      font-weight: 500;
+      color: #94a3b8;
+    }
+
+    .assistant-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.85rem;
+    }
+
+    .assistant-chip {
+      border: 1px solid #d7ecef;
+      border-radius: 9999px;
+      background: #ffffff;
+      padding: 0.35rem 0.7rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #0f766e;
+      transition: background-color 140ms ease, border-color 140ms ease;
+    }
+
+    .assistant-chip:hover {
+      border-color: #5eead4;
+      background: #f0fdfa;
+    }
+
+    .assistant-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+    }
+
+    .assistant-input {
+      flex: 1 1 auto;
+      min-width: 0;
+      border: 1px solid #d7ecef;
+      border-radius: 0.9rem;
+      background: #ffffff;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #0f172a;
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .assistant-input:focus {
+      border-color: #2dd4bf;
+      box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.16);
+    }
+
+    .assistant-send {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 0.4rem;
+      border-radius: 0.9rem;
+      background: linear-gradient(135deg, #0d9488, #0891b2);
+      padding: 0.65rem 0.95rem;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #ffffff;
+      transition: filter 160ms ease, transform 160ms ease;
+    }
+
+    .assistant-send:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    .assistant-note {
+      margin-top: 0.6rem;
+      font-size: 0.64rem;
+      font-weight: 500;
+      line-height: 1.4;
+      color: #94a3b8;
+    }
+
+    html[data-theme="dark"] .assistant-card {
+      background: rgba(13, 26, 42, 0.94);
+      border-color: rgba(94, 234, 212, 0.18);
+    }
+
+    html[data-theme="dark"] .msg-bot {
+      background: rgba(22, 38, 56, 0.95);
+      border-color: rgba(94, 234, 212, 0.16);
+      color: #cfe0ea;
+    }
+
+    html[data-theme="dark"] .msg-bot strong {
+      color: #eaf3fa;
+    }
+
+    html[data-theme="dark"] .assistant-chip {
+      background: rgba(16, 31, 48, 0.9);
+      border-color: rgba(94, 234, 212, 0.2);
+      color: #99f6e4;
+    }
+
+    html[data-theme="dark"] .assistant-input {
+      background: #0b1826;
+      border-color: rgba(148, 163, 184, 0.28);
+      color: #e6f0f7;
     }
 
     .count-pill {
@@ -2316,7 +2585,7 @@
       <button type="button" class="tab-button is-active" data-tab="calc" aria-selected="true">Калькулятор</button>
       <button type="button" class="tab-button" data-tab="feed" aria-selected="false">Кормление</button>
       <button type="button" class="tab-button" data-tab="care" aria-selected="false">Обслуживание</button>
-      <button type="button" class="tab-button" data-tab="faq" aria-selected="false">Частые вопросы</button>
+      <button type="button" class="tab-button" data-tab="faq" aria-selected="false">Помощник</button>
       <span class="tab-spacer" aria-hidden="true"></span>
       <button type="button" id="themeToggle" class="theme-toggle" aria-pressed="false">
         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5Z" stroke-linejoin="round"></path></svg>
@@ -2401,10 +2670,6 @@
                 <p class="mt-1 text-sm font-medium text-slate-500">Кто уже живёт в вашем аквариуме.</p>
               </div>
             </div>
-            <button type="button" class="add-button" data-add-kind="current">
-              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
-              Добавить рыбу
-            </button>
           </div>
 
           <div id="currentList" class="mt-5 space-y-3"></div>
@@ -2442,16 +2707,15 @@
                 <p class="mt-1 text-sm font-medium text-slate-500">Кого хочется докупить или подселить. Не знаете количество — нажмите «Сколько кого можно».</p>
               </div>
             </div>
-            <div class="flex flex-wrap items-center gap-2">
-              <button type="button" id="optimizeButton" class="optimize-button">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                Сколько кого можно
-              </button>
-              <button type="button" class="add-button add-button-sky" data-add-kind="planned">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
-                Добавить рыбу
-              </button>
-            </div>
+            <button type="button" id="optimizeButton" class="optimize-button">
+              <span class="optimize-icon" aria-hidden="true">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </span>
+              <span class="text-left">
+                <span class="optimize-title">Подобрать население</span>
+                <span class="optimize-sub">Скажу, сколько кого можно посадить</span>
+              </span>
+            </button>
           </div>
 
           <div id="plannedList" class="mt-5 space-y-3"></div>
@@ -2686,13 +2950,25 @@
     <section id="tabFaq" class="tab-panel" hidden aria-labelledby="faq-title">
       <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p class="eyebrow">Коротко о главном</p>
-          <h2 id="faq-title" class="mt-1.5 text-2xl font-black tracking-[-0.035em] text-slate-900 sm:text-3xl">Частые вопросы</h2>
-          <p class="mt-1.5 max-w-2xl text-sm font-medium leading-6 text-slate-500">Сначала — короткий ответ, ниже раскрывается подробность. Для новичков этого достаточно, чтобы не наделать типичных ошибок.</p>
+          <p class="eyebrow">Мини-помощник</p>
+          <h2 id="faq-title" class="mt-1.5 text-2xl font-black tracking-[-0.035em] text-slate-900 sm:text-3xl">Спросите про аквариум</h2>
+          <p class="mt-1.5 max-w-2xl text-sm font-medium leading-6 text-slate-500">Отвечаю только по теме: рыбы, совместимость, объём, кормление, уход, болезни. Вопросы не по аквариуму игнорирую.</p>
         </div>
-        <span class="result-badge">12 вопросов</span>
+        <span class="result-badge">по базе сайта</span>
       </div>
-      <div id="faqContent" class="space-y-2.5"></div>
+
+      <div class="assistant-card">
+        <div id="assistantMessages" class="assistant-messages" aria-live="polite"></div>
+        <div class="assistant-chips" id="assistantChips"></div>
+        <form id="assistantForm" class="assistant-form" autocomplete="off">
+          <input id="assistantInput" class="assistant-input" type="text" maxlength="200" placeholder="Например: сколько неонов в 100 л?" aria-label="Вопрос помощнику">
+          <button type="submit" class="assistant-send" id="assistantSend">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Спросить
+          </button>
+        </form>
+        <p class="assistant-note">Отвечаю по данным сайта: 153 вида, нормы объёма, кормление, оборудование и болезни. Не заменяет консультацию ветеринара.</p>
+      </div>
     </section>
 
     <section id="tabCare" class="tab-panel" hidden aria-labelledby="care-title">
@@ -2813,7 +3089,7 @@
           <div>
             <p class="eyebrow">Подбор количества</p>
             <h2 id="optimizerTitle" class="mt-1.5 text-2xl font-black tracking-[-0.035em] text-slate-900">Сколько кого можно</h2>
-            <p class="mt-1 max-w-xl text-sm font-medium leading-5 text-slate-500">Список берётся из «Планируемых обитателей». Укажите, каких рыб хочется больше — подберу количество под объём с учётом слоёв, стайности и территорий.</p>
+            <p class="mt-1 max-w-xl text-sm font-medium leading-5 text-slate-500">Список берётся из «Планируемых обитателей». Жмите «+» у нужного вида — его количество вырастет, а у остальных уменьшится, чтобы всё влезло в объём.</p>
           </div>
         </div>
         <button type="button" class="dialog-close" data-close-dialog="optimizerDialog" aria-label="Закрыть подбор количества">
@@ -5106,24 +5382,293 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         }
       ];
 
-      function renderFaq() {
-        const box = document.getElementById('faqContent');
-        if (!box) return;
+      const ASSISTANT_CHIPS = [
+        'Сколько неонов в 100 л?',
+        'Чем кормить скалярию?',
+        'Болезни петушка',
+        'Сколько грунта нужно?',
+        'Кто уживётся с гуппи?',
+        'Как запустить аквариум?'
+      ];
 
-        box.innerHTML = FAQ_ITEMS.map(function (item, index) {
-          return '<details class="info-card faq-item" ' + (index === 0 ? 'open' : '') + '>' +
-            '<summary class="cursor-pointer list-none">' +
-              '<span class="flex items-start gap-2.5">' +
-                '<span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-teal-100 text-[0.62rem] font-black text-teal-700">' + (index + 1) + '</span>' +
-                '<span class="min-w-0 flex-1">' +
-                  '<span class="block text-[0.86rem] font-extrabold leading-5 text-slate-800">' + item.q + '</span>' +
-                  '<span class="mt-1 block text-[0.76rem] font-medium leading-5 text-teal-800/80">' + item.short + '</span>' +
-                '</span>' +
-              '</span>' +
-            '</summary>' +
-            '<p class="mt-2 border-t border-slate-100 pt-2 text-[0.76rem] font-medium leading-5 text-slate-500">' + item.details + '</p>' +
-          '</details>';
-        }).join('');
+      let assistantReady = false;
+
+      function assistantNormalize(text) {
+        return String(text || '').toLowerCase().replace(/ё/g, 'е').trim();
+      }
+
+      function assistantFindFish(q) {
+        let best = null;
+        let bestLength = 0;
+
+        FISH_DB.forEach(function (fish) {
+          const name = fish.name.toLowerCase().replace(/ё/g, 'е');
+          const words = name.split(/[^a-zа-я0-9]+/).filter(Boolean);
+
+          if (q.indexOf(name) !== -1 && bestLength < 100) {
+            best = fish;
+            bestLength = 100;
+            return;
+          }
+
+          words.forEach(function (word) {
+            if (word.length < 4) return;
+            const stem = word.slice(0, Math.max(4, word.length - 2));
+            if (q.indexOf(stem) === -1) return;
+
+            const score = stem.length + (name.indexOf(stem) === 0 ? 4 : 0);
+            if (score > bestLength) {
+              best = fish;
+              bestLength = score;
+            }
+          });
+        });
+
+        return best;
+      }
+
+      function assistantMaxFish(fish, volume) {
+        const base = collectSelection('current');
+        let best = 0;
+
+        for (let qty = 1; qty <= 80; qty += 1) {
+          const test = new Map(base);
+          const existing = test.get(fish.id);
+          if (existing) existing.qty = qty;
+          else test.set(fish.id, { fish: fish, qty: qty });
+          const requirement = computeRequirement(test);
+          if (requirement.required <= volume + 0.001 && requirement.totalFish <= volume * 0.6 + 0.001) best = qty;
+          else break;
+        }
+
+        return best;
+      }
+
+      function assistantCompatible(fish, limit) {
+        const current = Array.from(collectSelection().values()).map(function (entry) {
+          return entry.fish;
+        });
+        const list = [];
+
+        FISH_DB.forEach(function (candidate) {
+          if (list.length >= limit) return;
+          if (candidate.id === fish.id) return;
+          if (candidate.aggression !== 'peaceful') return;
+          if (pairReasons(fish, candidate).length > 0) return;
+          if (current.some(function (other) { return pairReasons(candidate, other).length > 0; })) return;
+          list.push(candidate);
+        });
+
+        return list;
+      }
+
+      function assistantSubstrate(volume) {
+        const side = Math.cbrt((volume * 1000) / 2.2);
+        const length = Math.round(side * 2.2);
+        const width = Math.round(side);
+        const area = length * width;
+        return {
+          length: length,
+          width: width,
+          gravel: Math.max(1, Math.round((area * 5 / 1000) * 1.4)),
+          sand: Math.max(1, Math.round((area * 5 / 1000) * 1.6)),
+          planted: Math.max(1, Math.round((area * 7 / 1000) * 1.4))
+        };
+      }
+
+      function assistantAnswer(text) {
+        const q = assistantNormalize(text);
+        const tankVolume = Number(state.volume) > 0 ? Number(state.volume) : 0;
+        const askedVolume = (function () {
+          const match = q.match(/(\d{2,4})\s*л/);
+          return match ? Number(match[1]) : 0;
+        })();
+        const volume = askedVolume || tankVolume;
+        const fish = assistantFindFish(q);
+
+        if (!q) return 'Напишите вопрос — например: «сколько неонов в 100 л?»';
+
+        if (/^(привет|здравств|добрый|хай|ку)\b/.test(q)) {
+          return 'Привет! Я разбираюсь в аквариуме: подскажу, сколько рыб влезет, чем кормить, с кем уживаются и чем болеют. Спросите про конкретную рыбу или про уход.';
+        }
+
+        if (/спасибо|благодар/.test(q)) {
+          return 'Пожалуйста! Если что-то ещё по аквариуму — спрашивайте.';
+        }
+
+        if (fish) {
+          const temp = formatTemp(fish.temp);
+          const layer = LAYER_INFO[layerOf(fish)];
+
+          if (/температур|градус|тепл|холод/.test(q)) {
+            return '<strong>' + escapeHTML(fish.name) + '</strong> — комфортная температура ' + temp +
+              ', pH 6,8–7,5. ' + (fish.water === 'cold' ? 'Это холодноводный вид: не держите вместе с тропическими.' :
+              fish.water === 'temperate' ? 'Умеренная вода: подходит к данио и другим видам 18–24 °C.' :
+              'Тропический вид: стабильные 24–26 °C, ночью не ниже 23 °C.') +
+              '<span class="msg-note">Общий коридор для текущего состава смотрите во вкладке «Обслуживание».</span>';
+          }
+
+          if (/корм|кормить|еда|питани/.test(q)) {
+            let feeding = 'Хлопья или мелкие гранулы, порция на 2–3 минуты, 2 раза в день.';
+            if (layerOf(fish) === 'bottom') feeding = 'Тонущие таблетки после выключения света — корм должен опускаться на дно.';
+            if (fish.predator || fish.size >= 14) feeding = 'Крупные гранулы или замороженный корм 1 раз в день, порция по размеру пасти.';
+            if (['ancistrus', 'pleco', 'bristlenose', 'otocinclus'].indexOf(fish.id) !== -1) feeding = 'Растительная подкормка: спирулина, вафли или ошпаренный кабачок 1–2 раза в неделю плюс таблетки для сомов.';
+            return '<strong>' + escapeHTML(fish.name) + '</strong>: ' + feeding +
+              '<span class="msg-note">Точная порция в чайных ложках для вашего состава — во вкладке «Кормление».</span>';
+          }
+
+          if (/болезн|болеет|лечить|симптом|манка|плавник/.test(q)) {
+            const list = fishDiseases(fish).map(function (item) {
+              return '<li><strong>' + escapeHTML(item.name) + '</strong> — ' + escapeHTML(item.sign) + ' <em>Что делать:</em> ' + escapeHTML(item.action) + '.</li>';
+            }).join('');
+            return '<strong>' + escapeHTML(fish.name) + '</strong>, что встречается чаще всего:<ul>' + list + '</ul>' +
+              '<span class="msg-note">При первых симптомах — карантин и подмена воды, не лечите весь аквариум наугад.</span>';
+          }
+
+          if (/сколько|льзя|можно|влезет|объем|обьем|литр/.test(q)) {
+            if (!volume) return 'Укажите объём аквариума в шаге 1 — тогда посчитаю точно.';
+            const max = assistantMaxFish(fish, volume);
+            const note = max > 0
+              ? 'В ' + volume + ' л с учётом уже добавленных рыб поместится примерно <strong>' + max + ' ' + plural(max, ['особь', 'особи', 'особей']) + '</strong>.'
+              : 'С текущим составом места для этого вида уже не осталось.';
+            return '<strong>' + escapeHTML(fish.name) + '</strong>: ' + note +
+              '<span class="msg-note">Расчёт по подросткам (2–4 см) и слоям: ' + LAYER_INFO[layerOf(fish)].label.toLowerCase() + ', ' + formatNumber(unitLitres(fish)) + ' л на особь. Взрослые рыбы займут больше.</span>';
+          }
+
+          if (/совместим|сосед|ужив|вместе/.test(q)) {
+            const list = assistantCompatible(fish, 5).map(function (item) { return item.name; });
+            if (!list.length) return 'С текущим составом безопасных соседей для <strong>' + escapeHTML(fish.name) + '</strong> не нашлось — проверьте конфликты в калькуляторе.';
+            return 'С <strong>' + escapeHTML(fish.name) + '</strong> обычно уживаются: ' + list.join(', ') + '.' +
+              '<span class="msg-note">Это мирные виды без прямых конфликтов по характеру и температуре.</span>';
+          }
+
+          if (/стай|групп|один|пар/.test(q)) {
+            return fish.group > 1
+              ? '<strong>' + escapeHTML(fish.name) + '</strong> — стайная рыба, лучше от <strong>' + fish.group + '</strong> особей. В одиночку или парой стрессует и прячется.'
+              : '<strong>' + escapeHTML(fish.name) + '</strong> — содержат парой или поодиночке; ' + (fish.solo ? 'несколько взрослых особей будут конфликтовать.' : 'крупная стая не нужна.');
+          }
+
+          if (/слой|где жив|поверхност|дн[оа]/.test(q)) {
+            return '<strong>' + escapeHTML(fish.name) + '</strong> держится в слое «' + layer.label + '». ' +
+              (layerOf(fish) === 'bottom' ? 'Кормится со дна, не отнимает место у рыб среднего слоя.' :
+              layerOf(fish) === 'top' ? 'Держится у поверхности — следите, чтобы аквариум был закрыт.' :
+              'Плавает в толще воды; при содержании важно оставить свободное место для плавания.');
+          }
+
+          if (/размер|выраст|крупн/.test(q)) {
+            return '<strong>' + escapeHTML(fish.name) + '</strong>: в магазине примерно ' + formatNumber(purchaseSize(fish)) +
+              ' см, взрослая — до ' + formatNumber(fish.size) + ' см. Расчёт объёма идёт по размеру покупки, но аквариум лучше подбирать с запасом на рост.';
+          }
+
+          return '<strong>' + escapeHTML(fish.name) + '</strong>: ' + escapeHTML(fish.description) +
+            ' Комфорт ' + temp + ', слой «' + layer.label + '», ' + formatNumber(unitLitres(fish)) + ' л на особь, минимум ' + formatNumber(fish.minTank) + ' л.' +
+            '<span class="msg-note">Спросите про кормление, болезни, совместимость или сколько особей влезет.</span>';
+        }
+
+        if (/грунт/.test(q)) {
+          if (!volume) return 'Укажите объём в шаге 1 — посчитаю грунт под ваш аквариум.';
+          const sub = assistantSubstrate(volume);
+          return 'На ' + volume + ' л (дно примерно ' + sub.length + ' × ' + sub.width + ' см):<ul>' +
+            '<li>гравий 2–4 мм, слой 5 см — <strong>' + sub.gravel + ' кг</strong>;</li>' +
+            '<li>песок, 5 см — <strong>' + sub.sand + ' кг</strong>;</li>' +
+            '<li>под растения, 7 см — <strong>' + sub.planted + ' кг</strong>.</li></ul>' +
+            '<span class="msg-note">Сомикам и коридорасам лучше песок или окатанный гравий без острых краёв.</span>';
+        }
+
+        if (/фильтр|оборудован|обогрев|свет|аэрац|компрессор/.test(q)) {
+          if (!volume) return 'Укажите объём — рассчитаю мощность фильтра и обогревателя.';
+          const flow = Math.max(150, Math.round((volume * 4) / 50) * 50);
+          const flowMax = Math.max(150, Math.round((volume * 6) / 50) * 50);
+          const heater = Math.max(25, Math.round(volume / 25) * 25);
+          return 'На ' + volume + ' л нужно:<ul>' +
+            '<li>фильтр <strong>' + flow + '–' + flowMax + ' л/ч</strong> (4–6 объёмов в час);</li>' +
+            '<li>обогреватель <strong>' + heater + ' Вт</strong> (1 Вт на литр), для холодноводных не нужен;</li>' +
+            '<li>LED-свет, аэрация круглосуточно, термометр и тесты на аммиак/нитриты.</li></ul>' +
+            '<span class="msg-note">Подробный список — во вкладке «Обслуживание».</span>';
+        }
+
+        if (/подмен|обслуж|чист|сифон|нитрат/.test(q)) {
+          if (!volume) return 'Укажите объём — посчитаю объём подмены.';
+          const change = Math.max(5, Math.round(volume * 0.22));
+          return 'Схема для ' + volume + ' л:<ul>' +
+            '<li>каждую неделю — подмена <strong>' + change + ' л</strong> (20–25%) с сифонкой дна;</li>' +
+            '<li>каждые 2–4 недели — промыть губку фильтра в слитой воде;</li>' +
+            '<li>раз в месяц — проверить обогреватель, крепления и нитраты.</li></ul>' +
+            '<span class="msg-note">Не меняйте больше 30% воды за раз и не промывайте фильтр под краном.</span>';
+        }
+
+        if (/запуск|запустить|новый аквариум|цикл/.test(q)) {
+          return 'Запуск: 2–4 недели без рыб, с работающим фильтром, грунтом и подкормкой для бактерий. Рыб добавляйте партиями по 2–3 вида, первые 2–3 месяца тестируйте воду еженедельно.' +
+            '<span class="msg-note">Аммиак и нитриты должны быть по нулям, прежде чем заселять состав.</span>';
+        }
+
+        if (/мутн|зелен|водоросл|цветет|цветёт/.test(q)) {
+          return 'Мутная вода — обычно перекорм или незрелый фильтр. Белёсая муть проходит за 3–7 дней без корма. Зелёная — водоросли: сократите свет до 6–8 часов, подмените воду и проверьте нитраты.';
+        }
+
+        if (/корм|кормить|еда|рацион/.test(q)) {
+          return 'Общая схема: 1–2 раза в день, порция съедается за 2–3 минуты, раз в неделю разгрузочный день. Сухой корм — основа, заморозка и овощи — дополнение 2–3 раза в неделю.' +
+            '<span class="msg-note">Точная порция в чайных ложках для вашего состава — во вкладке «Кормление».</span>';
+        }
+
+        if (/болезн|лечить|симптом|манка|ихтик/.test(q)) {
+          return 'Самые частые проблемы: ихтиофтириоз («манка») — белые точки, поднять температуру до 28 °C и препарат; плавниковая гниль — чистая вода и антибактериальный препарат; грибок — белые нити на травмах.' +
+            '<span class="msg-note">Назовите вид рыбы — покажу болезни именно для неё.</span>';
+        }
+
+        if (/сколько рыб|сколько можно|населен|перенасел|плотност/.test(q)) {
+          return 'Считаю не по «1 см на литр», а по слоям и взрослому размеру: 100 л — это 40–60 неонов, 3–4 скалярии или 1–2 золотые. Нажмите «Подобрать население» — подберу количество под ваш объём и список рыб.';
+        }
+
+        const faq = FAQ_ITEMS.find(function (item) {
+          const words = assistantNormalize(item.q).split(/[^a-zа-я0-9]+/).filter(function (word) { return word.length > 4; });
+          return words.some(function (word) { return q.indexOf(word) !== -1; });
+        });
+
+        if (faq) {
+          return '<strong>' + faq.q + '</strong><br>' + faq.short + '<span class="msg-note">' + faq.details + '</span>';
+        }
+
+        return 'Я отвечаю только про аквариум: рыбы, совместимость, объём, кормление, оборудование, болезни. Спросите, например: «сколько неонов в 100 л?», «чем кормить гурами», «болезни петушка» или «сколько грунта».';
+      }
+
+      function assistantAppend(role, html) {
+        const box = document.getElementById('assistantMessages');
+        if (!box) return;
+        const div = document.createElement('div');
+        div.className = 'msg ' + (role === 'user' ? 'msg-user' : 'msg-bot');
+        div.innerHTML = html;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+      }
+
+      function assistantAsk(text) {
+        const value = String(text || '').trim();
+        if (!value) return;
+        assistantAppend('user', escapeHTML(value));
+        const answer = assistantAnswer(value);
+        window.setTimeout(function () {
+          assistantAppend('bot', answer);
+        }, 180);
+      }
+
+      function renderFaq() {
+        const box = document.getElementById('assistantMessages');
+        const chips = document.getElementById('assistantChips');
+        if (!box || !chips) return;
+
+        if (chips.childElementCount === 0) {
+          chips.innerHTML = ASSISTANT_CHIPS.map(function (text) {
+            return '<button type="button" class="assistant-chip" data-assistant-chip="' + escapeHTML(text) + '">' + escapeHTML(text) + '</button>';
+          }).join('');
+        }
+
+        if (!assistantReady) {
+          assistantReady = true;
+          assistantAppend('bot',
+            'Привет! Я мини-помощник по аквариуму. Спросите про конкретную рыбу, совместимость, кормление, объём или уход — отвечу по базе сайта.' +
+            '<span class="msg-note">Например: «сколько неонов в 100 л?», «болезни петушка», «сколько грунта».</span>');
+        }
       }
 
       function renderCare() {
@@ -5829,6 +6374,19 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
 
       let optimizerProposal = null;
       let optimizerAccepted = null;
+      const optimizerWeights = new Map();
+
+      function optimizerWeight(fishId) {
+        if (!optimizerWeights.has(fishId)) optimizerWeights.set(fishId, 1);
+        return optimizerWeights.get(fishId);
+      }
+
+      function nudgeOptimizerWeight(fishId, direction) {
+        const current = optimizerWeight(fishId);
+        const next = direction > 0 ? Math.min(9, current * 1.45) : Math.max(0.12, current / 1.45);
+        optimizerWeights.set(fishId, next);
+        renderOptimizer();
+      }
 
       function collectWishes() {
         const map = new Map();
@@ -5874,7 +6432,7 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
       }
 
       function allocatePopulation(volume, currentSelection, wishes) {
-        const LIMIT = 40;
+        const LIMIT = 60;
         const empty = new Map();
         wishes.forEach(function (wish) {
           empty.set(wish.fish.id, 0);
@@ -5902,7 +6460,9 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         }
 
         function fits(quantities) {
-          return computeRequirement(mergeSelection(currentSelection, wishes, quantities)).required <= volume + 0.001;
+          const merged = mergeSelection(currentSelection, wishes, quantities);
+          const requirement = computeRequirement(merged);
+          return requirement.required <= volume + 0.001 && requirement.totalFish <= volume * 0.6 + 0.001;
         }
 
         const start = base();
@@ -5932,11 +6492,13 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         let improved = true;
         let guard = 0;
 
-        while (improved && guard < 300) {
+        while (improved && guard < 400) {
           improved = false;
           guard += 1;
           const order = free.slice().sort(function (first, second) {
-            return second.priority - first.priority;
+            const firstQty = best.get(first.fish.id) || 0;
+            const secondQty = best.get(second.fish.id) || 0;
+            return (firstQty / first.priority) - (secondQty / second.priority);
           });
           for (let index = 0; index < order.length; index += 1) {
             const wish = order[index];
@@ -5987,35 +6549,8 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
           return;
         }
 
-        listEl.innerHTML = wishes.map(function (wish) {
-          const mode = wish.mode || 'normal';
-          const exactValue = wish.fixed > 0 ? wish.fixed : 10;
-          return '<div class="plan-item">' +
-            '<div class="flex flex-wrap items-center justify-between gap-2">' +
-              '<div class="min-w-0">' +
-                '<p class="truncate text-sm font-extrabold text-slate-800">' + escapeHTML(wish.fish.name) + '</p>' +
-                '<p class="mt-0.5 text-[0.66rem] font-semibold text-slate-400">' + LAYER_INFO[wish.layer].label + ' · ' + formatNumber(unitLitres(wish.fish)) + ' л/особь</p>' +
-              '</div>' +
-              '<div class="flex flex-wrap items-center gap-2">' +
-                '<label class="flex items-center gap-2 text-[0.66rem] font-bold text-slate-500">' +
-                  'Хочу' +
-                  '<select class="mini-input w-[7.5rem]" data-optimizer-mode="' + wish.fish.id + '">' +
-                    '<option value="less"' + (mode === 'less' ? ' selected' : '') + '>меньше</option>' +
-                    '<option value="normal"' + (mode === 'normal' ? ' selected' : '') + '>обычно</option>' +
-                    '<option value="more"' + (mode === 'more' ? ' selected' : '') + '>больше</option>' +
-                    '<option value="exact"' + (mode === 'exact' ? ' selected' : '') + '>ровно</option>' +
-                  '</select>' +
-                '</label>' +
-                '<label class="flex items-center gap-1.5 text-[0.66rem] font-bold text-slate-500"' + (mode === 'exact' ? '' : ' hidden') + ' data-optimizer-fixed-wrap="' + wish.fish.id + '">' +
-                  '<input class="mini-input w-[4.6rem]" type="number" min="1" max="99" step="1" inputmode="numeric" value="' + clampQuantity(exactValue) + '" data-optimizer-fixed="' + wish.fish.id + '">' +
-                  'шт.' +
-                '</label>' +
-              '</div>' +
-            '</div>' +
-          '</div>';
-        }).join('');
-
         if (!(volume > 0)) {
+          listEl.innerHTML = '';
           resultEl.innerHTML = '<p class="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[0.76rem] font-semibold text-amber-800">Сначала укажите объём аквариума в шаге 1.</p>';
           optimizerProposal = null;
           return;
@@ -6023,10 +6558,33 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
 
         const currentSelection = collectSelection('current');
         const split = splitWishesByConflicts(wishes, currentSelection);
-        const allocation = allocatePopulation(volume, currentSelection, split.accepted);
+        const weighted = split.accepted.map(function (wish) {
+          return Object.assign({}, wish, { priority: optimizerWeight(wish.fish.id) });
+        });
+        const allocation = allocatePopulation(volume, currentSelection, weighted);
         const proposal = allocation.quantities;
         optimizerProposal = proposal;
         optimizerAccepted = split.accepted;
+
+        listEl.innerHTML = split.accepted.map(function (wish) {
+          const qty = proposal.get(wish.fish.id) || 0;
+          const weight = optimizerWeight(wish.fish.id);
+          const canMore = qty < 60;
+
+          return '<div class="plan-item">' +
+            '<div class="flex flex-wrap items-center justify-between gap-2">' +
+              '<div class="min-w-0">' +
+                '<p class="truncate text-sm font-extrabold text-slate-800">' + escapeHTML(wish.fish.name) + '</p>' +
+                '<p class="mt-0.5 text-[0.66rem] font-semibold text-slate-400">' + LAYER_INFO[wish.layer].label + ' · ' + formatNumber(unitLitres(wish.fish)) + ' л/особь</p>' +
+              '</div>' +
+              '<div class="opt-stepper">' +
+                '<button type="button" class="opt-step" data-opt-dec="' + wish.fish.id + '" aria-label="Меньше особей ' + escapeHTML(wish.fish.name) + '"' + (weight <= 0.13 ? ' disabled' : '') + '>−</button>' +
+                '<span class="opt-qty"><strong>' + qty + '</strong> шт.</span>' +
+                '<button type="button" class="opt-step" data-opt-inc="' + wish.fish.id + '" aria-label="Больше особей ' + escapeHTML(wish.fish.name) + '"' + (canMore ? '' : ' disabled') + '>+</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+        }).join('');
 
         const merged = mergeSelection(currentSelection, split.accepted, proposal);
         const requirement = computeRequirement(merged);
@@ -6038,27 +6596,15 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
           const litres = qty > 0 ? spaceForFish(wish.fish, qty).total : 0;
           const short = wish.fish.group > 1 && qty > 0 && qty < wish.fish.group;
 
-          const exactMark = wish.mode === 'exact' && wish.fixed > 0
-            ? '<span class="ml-1 rounded-full bg-slate-100 px-1.5 py-0.5 text-[0.6rem] font-extrabold text-slate-500">ровно ' + wish.fixed + '</span>'
-            : '';
-
           return '<li class="flex items-baseline justify-between gap-2 border-t border-slate-100 py-1.5 text-[0.76rem] first:border-t-0">' +
             '<span class="min-w-0">' +
               '<span class="font-extrabold text-slate-800">' + escapeHTML(wish.fish.name) + '</span>' +
               '<span class="ml-1 font-bold text-teal-700">' + (qty > 0 ? qty + ' шт.' : 'не помещается') + '</span>' +
-              exactMark +
               (short ? '<span class="ml-1 text-[0.64rem] font-semibold text-amber-600">(лучше от ' + wish.fish.group + ')</span>' : '') +
             '</span>' +
             '<span class="shrink-0 font-bold text-slate-500">' + (qty > 0 ? formatLitres(litres) : '—') + '</span>' +
           '</li>';
         }).join('');
-
-        const overBlock = allocation.over
-          ? '<div class="mt-3 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2.5">' +
-              '<p class="text-[0.72rem] font-extrabold text-rose-800">Указанное количество не помещается</p>' +
-              '<p class="mt-1 text-[0.7rem] font-medium leading-4 text-rose-900/80">Даже с нулём для остальных видов аквариум переполнен. Уменьшите «ровно» или увеличьте объём.</p>' +
-            '</div>'
-          : '';
 
         const rejectedBlock = split.rejected.length > 0
           ? '<div class="mt-3 rounded-xl border border-rose-100 bg-rose-50/70 px-3 py-2.5">' +
@@ -6083,9 +6629,8 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
             '</div>' +
             '<ul class="mt-2">' + rows + '</ul>' +
             optimizerLayerBars(requirement, volume) +
-            overBlock +
             rejectedBlock +
-            '<p class="mt-2 text-[0.62rem] font-medium leading-4 text-slate-500">Количество подбирается с приоритетами: сначала фиксированные «ровно», затем «хочу больше», потом остальные — в пределах свободного места каждого слоя. Конфликтующие виды не рассчитываются.</p>' +
+            '<p class="mt-2 text-[0.62rem] font-medium leading-4 text-slate-500">Жмите <strong>+</strong> у нужного вида: его количество вырастет за счёт остальных, не выходя за объём. <strong>−</strong> возвращает место другим. Конфликтующие виды не рассчитываются.</p>' +
           '</div>';
       }
 
@@ -6776,38 +7321,19 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
 
       const optimizerList = document.getElementById('optimizerList');
       if (optimizerList) {
-        optimizerList.addEventListener('change', function (event) {
+        optimizerList.addEventListener('click', function (event) {
           const target = event.target;
           if (!target || !target.closest) return;
 
-          const modeSelect = target.closest('[data-optimizer-mode]');
-          if (modeSelect) {
-            const fishId = modeSelect.getAttribute('data-optimizer-mode');
-            const mode = modeSelect.value;
-            state.planned.forEach(function (row) {
-              const fish = resolveFish(row);
-              if (!fish || fish.id !== fishId) return;
-              row.optimizeMode = mode;
-              if (mode === 'less') row.priority = 1;
-              if (mode === 'normal') row.priority = 2;
-              if (mode === 'more') row.priority = 4;
-              if (mode === 'exact' && !(row.fixedQty > 0)) row.fixedQty = clampQuantity(row.qty || 10);
-            });
-            renderOptimizer();
-            if (saveReady) scheduleDraftSave();
+          const inc = target.closest('[data-opt-inc]');
+          if (inc) {
+            nudgeOptimizerWeight(inc.getAttribute('data-opt-inc'), 1);
             return;
           }
 
-          const fixedInput = target.closest('[data-optimizer-fixed]');
-          if (fixedInput) {
-            const fishId = fixedInput.getAttribute('data-optimizer-fixed');
-            const value = clampQuantity(fixedInput.value);
-            state.planned.forEach(function (row) {
-              const fish = resolveFish(row);
-              if (fish && fish.id === fishId) row.fixedQty = value;
-            });
-            renderOptimizer();
-            if (saveReady) scheduleDraftSave();
+          const dec = target.closest('[data-opt-dec]');
+          if (dec) {
+            nudgeOptimizerWeight(dec.getAttribute('data-opt-dec'), -1);
           }
         });
       }
@@ -6818,11 +7344,12 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
       const optimizerReset = document.getElementById('optimizerReset');
       if (optimizerReset) {
         optimizerReset.addEventListener('click', function () {
+          optimizerWeights.clear();
           state.planned.forEach(function (row) {
             row.priority = 2;
           });
           renderOptimizer();
-          showToast('Приоритеты сброшены');
+          showToast('Количество сброшено к равному');
         });
       }
 
@@ -6894,6 +7421,28 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
 
       const resetPlanButton = document.getElementById('resetPlanButton');
       if (resetPlanButton) resetPlanButton.addEventListener('click', resetPlan);
+
+      const assistantForm = document.getElementById('assistantForm');
+      if (assistantForm) {
+        assistantForm.addEventListener('submit', function (event) {
+          event.preventDefault();
+          const input = document.getElementById('assistantInput');
+          assistantAsk(input ? input.value : '');
+          if (input) {
+            input.value = '';
+            input.focus();
+          }
+        });
+      }
+
+      const assistantChips = document.getElementById('assistantChips');
+      if (assistantChips) {
+        assistantChips.addEventListener('click', function (event) {
+          const chip = event.target.closest('[data-assistant-chip]');
+          if (!chip) return;
+          assistantAsk(chip.getAttribute('data-assistant-chip'));
+        });
+      }
 
       document.querySelectorAll('[data-close-dialog]').forEach(function (button) {
         button.addEventListener('click', function () {
