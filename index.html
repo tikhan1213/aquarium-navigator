@@ -490,6 +490,25 @@
       color: #5eead4;
     }
 
+    .qty-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 2.9rem;
+      border: 1px solid #d8edf1;
+      border-radius: 0.95rem;
+      background: rgba(240, 253, 250, 0.75);
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #0f766e;
+    }
+
+    html[data-theme="dark"] .qty-badge {
+      background: rgba(13, 62, 60, 0.5);
+      border-color: rgba(94, 234, 212, 0.25);
+      color: #5eead4;
+    }
+
     .planned-item {
       display: flex;
       align-items: center;
@@ -2730,6 +2749,10 @@
                 <p class="mt-1 text-sm font-medium text-slate-500">Кто уже живёт в вашем аквариуме.</p>
               </div>
             </div>
+            <button type="button" class="add-button" data-add-kind="current">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+              Добавить рыбу
+            </button>
           </div>
 
           <div id="currentList" class="mt-5 space-y-3"></div>
@@ -2743,8 +2766,8 @@
             </div>
             <p class="mt-3 text-sm font-extrabold text-slate-700">Пока никого нет</p>
             <p class="mt-1 max-w-xs text-xs font-medium leading-5 text-slate-400">Добавьте рыб, которые уже живут в аквариуме, чтобы учесть их в расчёте.</p>
-            <button type="button" class="mt-3 text-xs font-extrabold text-teal-700 underline decoration-teal-200 decoration-2 underline-offset-4 transition hover:text-teal-900" data-open-catalog>
-              Выбрать в каталоге
+            <button type="button" class="mt-3 text-xs font-extrabold text-teal-700 underline decoration-teal-200 decoration-2 underline-offset-4 transition hover:text-teal-900" data-add-kind="current">
+              Добавить первую рыбу
             </button>
           </div>
         </section>
@@ -2764,18 +2787,24 @@
                   <span id="plannedCount" class="count-pill">0 видов</span>
                 </div>
                 <h2 id="planned-title" class="mt-1.5 text-lg font-extrabold tracking-[-0.025em] text-slate-900 sm:text-xl">Планируемые обитатели</h2>
-                <p class="mt-1 text-sm font-medium text-slate-500">Кого хочется докупить или подселить. Не знаете количество — нажмите «Сколько кого можно».</p>
+                <p class="mt-1 text-sm font-medium text-slate-500">Кого хочется докупить или подселить. Количество подберёт «Подобрать население».</p>
               </div>
             </div>
-            <button type="button" id="optimizeButton" class="optimize-button">
-              <span class="optimize-icon" aria-hidden="true">
-                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-              </span>
-              <span class="text-left">
-                <span class="optimize-title">Подобрать население</span>
-                <span class="optimize-sub">Скажу, сколько кого можно посадить</span>
-              </span>
-            </button>
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" id="optimizeButton" class="optimize-button">
+                <span class="optimize-icon" aria-hidden="true">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                </span>
+                <span class="text-left">
+                  <span class="optimize-title">Подобрать население</span>
+                  <span class="optimize-sub">Скажу, сколько кого можно посадить</span>
+                </span>
+              </button>
+              <button type="button" class="add-button add-button-sky" data-add-kind="planned">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+                Добавить рыбу
+              </button>
+            </div>
           </div>
 
           <div id="plannedList" class="mt-5 space-y-3"></div>
@@ -2788,7 +2817,10 @@
               </svg>
             </div>
             <p class="mt-3 text-sm font-extrabold text-slate-700">Пока пусто</p>
-            <p class="mt-1 max-w-xs text-xs font-medium leading-5 text-slate-400">Нажмите «Подобрать население» — выберу количество под ваш объём. Или добавьте вид из каталога.</p>
+            <p class="mt-1 max-w-xs text-xs font-medium leading-5 text-slate-400">Добавьте рыб, которых планируете купить. Количество подберёте кнопкой «Подобрать население».</p>
+            <button type="button" class="mt-3 text-xs font-extrabold text-sky-700 underline decoration-sky-200 decoration-2 underline-offset-4 transition hover:text-sky-900" data-add-kind="planned">
+              Запланировать рыбу
+            </button>
           </div>
         </section>
 
@@ -4059,11 +4091,8 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
               '<p class="mt-1 text-[0.62rem] font-medium text-slate-400">Можно выбрать из базы или ввести своё название.</p>' +
             '</div>' +
             '<div class="sm:w-28">' +
-              '<label for="' + qtyId + '" class="field-label">Количество</label>' +
-              '<div class="relative mt-1.5">' +
-                '<input id="' + qtyId + '" data-role="qty" class="field-input qty-input" type="number" min="1" max="99" step="1" inputmode="numeric" value="' + clampQuantity(row.qty) + '">' +
-                '<span class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[0.68rem] font-bold text-slate-400">шт.</span>' +
-              '</div>' +
+              '<span class="field-label">Количество</span>' +
+              '<div class="qty-badge mt-1.5" data-role="qty-badge">' + clampQuantity(row.qty) + ' шт.</div>' +
             '</div>' +
             '<button type="button" data-action="remove" class="icon-button h-11 w-11 shrink-0 self-end sm:mt-[1.35rem]" aria-label="Удалить рыбу из списка" title="Удалить">' +
               '<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" stroke-linecap="round" stroke-linejoin="round"></path></svg>' +
@@ -4100,15 +4129,6 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         const list = getRowList(kind);
         const empty = kind === 'current' ? el.currentEmpty : el.plannedEmpty;
         const rows = getRowArray(kind);
-
-        if (kind === 'planned') {
-          const filled = rows.filter(rowHasFish);
-          list.innerHTML = filled.map(buildPlannedMarkup).join('');
-          empty.hidden = filled.length > 0;
-          updateCount(kind);
-          updatePreview();
-          return;
-        }
 
         list.innerHTML = rows.map(buildRowMarkup).join('');
         empty.hidden = rows.length > 0;
