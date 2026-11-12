@@ -4116,11 +4116,22 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         '</div>';
       }
 
-      function buildRowMarkup(row) {
+      function buildRowMarkup(row, kind) {
         const fish = resolveFish(row);
         const displayName = fish ? fish.name : (row.fishName || '');
         const selectId = 'species-' + row.uid;
         const qtyId = 'qty-' + row.uid;
+        const showQty = kind === 'current';
+
+        const qtyBlock = showQty
+          ? '<div class="sm:w-28">' +
+              '<label for="' + qtyId + '" class="field-label">Количество</label>' +
+              '<div class="relative mt-1.5">' +
+                '<input id="' + qtyId + '" data-role="qty" class="field-input qty-input" type="number" min="1" max="99" step="1" inputmode="numeric" value="' + clampQuantity(row.qty) + '">' +
+                '<span class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[0.68rem] font-bold text-slate-400">шт.</span>' +
+              '</div>' +
+            '</div>'
+          : '';
 
         return '<div class="fish-row" data-row-id="' + row.uid + '">' +
           '<div class="flex flex-col gap-3 sm:flex-row sm:items-start">' +
@@ -4132,6 +4143,7 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
               '</div>' +
               '<p class="mt-1 text-[0.62rem] font-medium text-slate-400">Можно выбрать из базы или ввести своё название.</p>' +
             '</div>' +
+            qtyBlock +
             '<button type="button" data-action="remove" class="icon-button h-11 w-11 shrink-0 self-end sm:mt-6" aria-label="Удалить рыбу из списка" title="Удалить">' +
               '<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" stroke-linecap="round" stroke-linejoin="round"></path></svg>' +
             '</button>' +
@@ -4168,7 +4180,9 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         const empty = kind === 'current' ? el.currentEmpty : el.plannedEmpty;
         const rows = getRowArray(kind);
 
-        list.innerHTML = rows.map(buildRowMarkup).join('');
+        list.innerHTML = rows.map(function (row) {
+          return buildRowMarkup(row, kind);
+        }).join('');
         empty.hidden = rows.length > 0;
         updateCount(kind);
         updatePreview();
@@ -5531,6 +5545,76 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         'Как запустить аквариум?'
       ];
 
+      const ASSISTANT_DISEASES = [
+        {
+          keys: ['ихтиофтириоз', 'ихтик', 'манк', 'белые точк', 'белые пятн', 'крупинк'],
+          name: 'Ихтиофтириоз («манка»)',
+          signs: 'белые точки размером с крупинку на плавниках и теле, рыба чешется о декор, дышит чаще',
+          treatment: 'поднять температуру до 27–28 °C (если виды выдерживают), внести препарат с малахитовым зелёным по инструкции, курс 7–10 дней. Убрать уголь из фильтра, подмены 25% через день. Лечить весь аквариум, а не одну рыбу.'
+        },
+        {
+          keys: ['сапролегн', 'гриб', 'ватн', 'белый налет', 'белый налёт'],
+          name: 'Сапролегния (грибок)',
+          signs: 'белые ватные нити на травмах, плавниках или икре — грибок цепляется за повреждённые участки',
+          treatment: 'убрать причину: травмы, грязная вода, остатки корма. Подмены 25–30% с сифонкой, препарат на основе метиленового синего или аквариумный антисептик по инструкции, курс 5–7 дней. Соль-ванны (1 ч. л. на 5 л, 10–15 минут) — только как вспомогательное.'
+        },
+        {
+          keys: ['плавников', 'плавник', 'гнил'],
+          name: 'Плавниковая гниль',
+          signs: 'плавники мутнеют, рвутся по краям, белеют и укорачиваются',
+          treatment: 'чистая вода (подмены 25% каждые 2 дня), антибактериальный препарат по инструкции, убрать соседей, которые кусают плавники. Курс около 7 дней.'
+        },
+        {
+          keys: ['водянк', 'асцит', 'раздутое брюхо', 'торчащая чешуя'],
+          name: 'Водянка (асцит)',
+          signs: 'раздутое брюхо, чешуя торчит ёлочкой, отказ от корма и вялость',
+          treatment: 'немедленно отсадить, не кормить 2–3 дня, антибиотик (канамицин) по схеме, соль 1 г/л. На поздней стадии почти не лечится — важнее не запускать.'
+        },
+        {
+          keys: ['гексамитоз', 'дырк', 'эрозии на голове'],
+          name: 'Гексамитоз («дырки в голове»)',
+          signs: 'ямки и эрозии на голове, белые нити в экскрементах, худоба',
+          treatment: 'проверить нитраты и воду, метронидазол по схеме 7–10 дней, разнообразный корм. Чаще встречается у цихлид.'
+        },
+        {
+          keys: ['плавательн', 'пузыр', 'плавает боком', 'вверх брюхом'],
+          name: 'Нарушение плавательного пузыря',
+          signs: 'рыба плавает боком или вверх брюхом, не может держать глубину',
+          treatment: 'разгрузка 2 дня, затем размоченный корм мелкими порциями, проверить температуру и нитраты. Золотым рыбкам лучше овощи вместо сухого корма.'
+        },
+        {
+          keys: ['оодиниоз', 'бархатн', 'золотистый налет', 'золотистый налёт'],
+          name: 'Оодиниоз («бархатная болезнь»)',
+          signs: 'мелкий золотисто-серый налёт, слизь, учащённое дыхание',
+          treatment: 'затемнить аквариум, препарат против оодиниоза по инструкции, температура 24–25 °C, курс 7–10 дней.'
+        },
+        {
+          keys: ['неоновая болезн', 'неоновая'],
+          needsContext: true,
+          name: 'Неоновая болезнь',
+          signs: 'теряется окраска, рыба худеет и плавает боком',
+          treatment: 'не лечится. Больную рыбу отсадить и усыпить, инвентарь продезинфицировать, новых неонов не добавлять 2–3 недели.'
+        }
+      ];
+
+      function assistantFindDisease(q) {
+        const hasContext = /леч|болезн|симптом|признак|что делать|заболел|болеет|умер|гибн/.test(q);
+
+        for (let index = 0; index < ASSISTANT_DISEASES.length; index += 1) {
+          const disease = ASSISTANT_DISEASES[index];
+          if (disease.needsContext && !hasContext) continue;
+
+          for (let keyIndex = 0; keyIndex < disease.keys.length; keyIndex += 1) {
+            const key = disease.keys[keyIndex];
+            if (q.indexOf(key) === -1) continue;
+            if (key.length < 5 && !hasContext) continue;
+            return disease;
+          }
+        }
+
+        return null;
+      }
+
       let assistantReady = false;
 
       function assistantNormalize(text) {
@@ -5634,6 +5718,16 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
 
         if (/спасибо|благодар/.test(q)) {
           return 'Пожалуйста! Если что-то ещё по аквариуму — спрашивайте.';
+        }
+
+        const disease = assistantFindDisease(q);
+        if (disease) {
+          const fishNote = fish
+            ? '<span class="msg-note">' + escapeHTML(fish.name) + ': чаще всего помогает раннее начало и карантин новых рыб. Если симптомов несколько — опишите их, подскажу точнее.</span>'
+            : '<span class="msg-note">Лечение зависит от диагноза. Опишите симптомы и назовите вид рыбы — уточню.</span>';
+
+          return '<strong>' + escapeHTML(disease.name) + '</strong>. Признаки: ' + escapeHTML(disease.signs) + '.<br>' +
+            '<strong>Что делать:</strong> ' + escapeHTML(disease.treatment) + fishNote;
         }
 
         if (fish) {
@@ -5752,8 +5846,12 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         }
 
         if (/болезн|лечить|симптом|манка|ихтик/.test(q)) {
-          return 'Самые частые проблемы: ихтиофтириоз («манка») — белые точки, поднять температуру до 28 °C и препарат; плавниковая гниль — чистая вода и антибактериальный препарат; грибок — белые нити на травмах.' +
-            '<span class="msg-note">Назовите вид рыбы — покажу болезни именно для неё.</span>';
+          return 'Опишите симптомы — назову болезнь и лечение. Чаще всего встречается:<ul>' +
+            '<li><strong>ихтиофтириоз («манка»)</strong> — белые точки на теле и плавниках;</li>' +
+            '<li><strong>сапролегния (грибок)</strong> — белые ватные нити на травмах;</li>' +
+            '<li><strong>плавниковая гниль</strong> — мутные, рваные плавники;</li>' +
+            '<li><strong>водянка</strong> — раздутое брюхо и торчащая чешуя.</li></ul>' +
+            '<span class="msg-note">Можно спросить прямо: «как лечить сапролегнию» или «болезни петушка».</span>';
         }
 
         if (/сколько рыб|сколько можно|населен|перенасел|плотност/.test(q)) {
