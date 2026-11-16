@@ -5821,29 +5821,54 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
         return String(text || '').toLowerCase().replace(/ё/g, 'е').trim();
       }
 
+      function assistantWordStem(word) {
+        return word.length >= 5 ? word.slice(0, 5) : word;
+      }
+
       function assistantFindFish(q) {
         let best = null;
         let bestLength = 0;
+
+        const questionWords = q.split(/[^a-zа-я0-9]+/).filter(function (word) {
+          return word.length >= 4;
+        });
+        const questionStems = questionWords.map(assistantWordStem);
 
         FISH_DB.forEach(function (fish) {
           const name = fish.name.toLowerCase().replace(/ё/g, 'е');
           const words = name.split(/[^a-zа-я0-9]+/).filter(Boolean);
 
-          if (q.indexOf(name) !== -1 && bestLength < 100) {
-            best = fish;
-            bestLength = 100;
+          if (q.indexOf(name) !== -1) {
+            if (bestLength < 100) {
+              best = fish;
+              bestLength = 100;
+            }
             return;
           }
 
           words.forEach(function (word) {
             if (word.length < 4) return;
-            const stem = word.slice(0, Math.max(4, word.length - 2));
-            if (q.indexOf(stem) === -1) return;
+            const fishStem = assistantWordStem(word);
 
-            const score = stem.length + (name.indexOf(stem) === 0 ? 4 : 0);
-            if (score > bestLength) {
-              best = fish;
-              bestLength = score;
+            for (let index = 0; index < questionWords.length; index += 1) {
+              const qWord = questionWords[index];
+              const qStem = questionStems[index];
+
+              if (qWord === word) {
+                if (bestLength < 90) {
+                  best = fish;
+                  bestLength = 90;
+                }
+                return;
+              }
+
+              if (qWord.indexOf(fishStem) === 0 || word.indexOf(qStem) === 0) {
+                const score = Math.min(fishStem.length, qStem.length) + (name.indexOf(fishStem) === 0 ? 2 : 0);
+                if (score > bestLength) {
+                  best = fish;
+                  bestLength = score;
+                }
+              }
             }
           });
         });
@@ -6067,7 +6092,7 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
       }
 
       const AI_ENDPOINT = 'https://text.pollinations.ai/openai';
-      const AI_SYSTEM_PROMPT = 'Ты — помощник сайта «Аквариумный Навигатор» про аквариум и рыб. Отвечай на любые вопросы пользователя: на вопросы про аквариум — точно и по делу, на остальные — коротко и по существу. Пиши по-русски, простыми предложениями, без markdown-таблиц, не длиннее 8 предложений. Если не уверен — скажи об этом.';
+      const AI_SYSTEM_PROMPT = 'Ты — ИИ-помощник сайта «Аквариумный Навигатор» (калькулятор аквариумных рыб). Отвечай на любые вопросы: про аквариум — точно, на остальные — кратко и по делу. Если спрашивают, кто ты, отвечай: «Я ИИ-помощник сайта Аквариумный Навигатор». Пиши по-русски, простыми предложениями, без markdown, до 6 предложений. Не выдумывай факты: если не знаешь — так и скажи.';
       const AI_STOP_MARKER = 'По базе сайта я отвечаю про аквариум';
 
       let assistantHistory = [];
