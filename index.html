@@ -829,6 +829,22 @@
       color: #94a3b8;
     }
 
+    .ai-retry {
+      display: inline-block;
+      margin-top: 0.45rem;
+      border: 1px solid #99f6e4;
+      border-radius: 0.6rem;
+      background: #f0fdfa;
+      padding: 0.32rem 0.75rem;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #0f766e;
+    }
+
+    .ai-retry:hover {
+      background: #ccfbf1;
+    }
+
     @media (max-width: 520px) {
       .ai-grid {
         grid-template-columns: 1fr;
@@ -6083,7 +6099,7 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
           return 'Считаю не по «1 см на литр», а по слоям и взрослому размеру: 100 л — это 40–60 неонов, 3–4 скалярии или 1–2 золотые. Нажмите «Подобрать население» — подберу количество под ваш объём и список рыб.';
         }
 
-        if (/как пользоваться|инструкц|как добавить|как подобрать|как сохранить|как работает сайт|что нажимать/.test(q)) {
+        if (/как пользоваться (сайтом|калькулятором|этим|интерфейсом)|инструкц|как добавить (рыбу|вид)|как подобрать (количество|население)|как сохранить (план|состав)|как работает сайт|что нажимать|как пользоваться\s*$/.test(q)) {
           return 'Коротко: 1) укажите объём аквариума, 2) добавьте текущих рыб кнопкой «Добавить рыбу», 3) добавьте планируемых, 4) нажмите «Подобрать население» и выставьте количество, 5) проверьте состав кнопкой «Проверить совместимость и объём».' +
             '<span class="msg-note">Подробная инструкция — во вкладке «Инструкция».</span>';
         }
@@ -6092,11 +6108,12 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
       }
 
       const AI_ENDPOINT = 'https://text.pollinations.ai/openai';
-      const AI_SYSTEM_PROMPT = 'Ты — ИИ-помощник сайта «Аквариумный Навигатор» (калькулятор аквариумных рыб). Отвечай на любые вопросы: про аквариум — точно, на остальные — кратко и по делу. Если спрашивают, кто ты, отвечай: «Я ИИ-помощник сайта Аквариумный Навигатор». Пиши по-русски, простыми предложениями, без markdown, до 6 предложений. Не выдумывай факты: если не знаешь — так и скажи.';
+      const AI_SYSTEM_PROMPT = 'Ты — ИИ-помощник сайта «Аквариумный Навигатор» (калькулятор аквариумных рыб). Отвечай на любые вопросы: про аквариум — точно, на остальные — кратко и по делу. Если спрашивают, кто ты, отвечай: «Я ИИ-помощник сайта Аквариумный Навигатор». Пиши по-русски, простыми предложениями, без markdown, до 6 предложений. Не выдумывай факты: если не знаешь — так и скажи. Если спрашивают про незнакомую аббревиатуру — предложи 2-3 вероятные расшифровки и попроси уточнить.';
       const AI_STOP_MARKER = 'По базе сайта я отвечаю про аквариум';
 
       let assistantHistory = [];
       let aiBusy = false;
+      let lastAiQuestion = '';
 
       function formatAiText(text) {
         return escapeHTML(String(text || ''))
@@ -6192,6 +6209,7 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
         }
 
         aiBusy = true;
+        lastAiQuestion = value;
         const bubble = assistantAppend('bot', '<span class="msg-typing">Печатаю…</span>');
 
         function finish(answer) {
@@ -6206,24 +6224,28 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
           const wait = error && error.retry ? error.retry : 45;
           const limited = error && (error.status === 402 || error.status === 429);
 
-          if (limited && !retried && wait <= 60) {
+          if (!retried) {
+            const delay = limited && wait <= 60 ? (wait + 1) * 1000 : 2500;
             if (bubble) {
-              bubble.innerHTML = '<span class="msg-typing">Бесплатный ИИ занят — подожду ' + wait + ' секунд и отвечу автоматически…</span>';
+              bubble.innerHTML = '<span class="msg-typing">' +
+                (limited ? 'Бесплатный ИИ занят — подожду ' + wait + ' секунд и отвечу автоматически…' : 'Не получилось с первого раза, пробую ещё…') +
+                '</span>';
             }
             window.setTimeout(function () {
               askFreeAi(value).then(finish).catch(function (secondError) {
                 fail(secondError, true);
               });
-            }, (wait + 1) * 1000);
+            }, delay);
             return;
           }
 
           if (bubble) {
             bubble.innerHTML = '<strong>Не получилось ответить.</strong> ' +
               (limited
-                ? 'Лимит бесплатного ИИ — одна реплика в ' + wait + ' секунд. Спросите чуть позже.'
-                : 'Проверьте интернет и попробуйте ещё раз.') +
-              '<span class="msg-note">А по аквариуму я отвечаю сразу: «сколько неонов в 100 л», «болезни петушка», «сколько грунта», «как пользоваться сайтом».</span>';
+                ? 'Бесплатный ИИ ограничен — одна реплика в ' + wait + ' секунд.'
+                : 'Бесплатный ИИ не отвечает — возможно, перегружен.') +
+              '<span class="msg-note">Нажмите «Повторить» через полминуты. А по аквариуму я отвечаю сразу.</span>' +
+              '<button type="button" class="ai-retry" data-ai-retry="1">Повторить</button>';
           }
           assistantScroll();
           aiBusy = false;
@@ -8203,6 +8225,12 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
         if (target.closest('[data-open-catalog]')) {
           event.preventDefault();
           openCatalogDialog();
+          return;
+        }
+
+        if (target.closest('[data-ai-retry]')) {
+          event.preventDefault();
+          if (lastAiQuestion && !aiBusy) assistantAsk(lastAiQuestion);
         }
       });
 
