@@ -744,6 +744,114 @@
       transform: translateY(-1px);
     }
 
+    .ai-settings {
+      margin-top: 0.85rem;
+      border: 1px solid #e2eef1;
+      border-radius: 0.95rem;
+      background: #f8fcfd;
+      padding: 0.1rem 0.85rem;
+    }
+
+    .ai-settings summary {
+      cursor: pointer;
+      padding: 0.6rem 0;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #0f766e;
+    }
+
+    .ai-settings-body {
+      padding-bottom: 0.75rem;
+    }
+
+    .ai-settings-hint {
+      margin: 0.2rem 0 0.55rem;
+      font-size: 0.66rem;
+      font-weight: 500;
+      line-height: 1.45;
+      color: #94a3b8;
+    }
+
+    .ai-settings-hint code {
+      font-size: 0.64rem;
+      background: #eef7f9;
+      padding: 0.05rem 0.25rem;
+      border-radius: 0.3rem;
+    }
+
+    .ai-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .ai-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .ai-field-wide {
+      grid-column: 1 / -1;
+    }
+
+    .ai-field input,
+    .ai-field select {
+      border: 1px solid #d7ecef;
+      border-radius: 0.6rem;
+      background: #ffffff;
+      padding: 0.45rem 0.55rem;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #0f172a;
+      outline: none;
+    }
+
+    .ai-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.6rem;
+    }
+
+    .ai-status {
+      margin-top: 0.55rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #0f766e;
+    }
+
+    .msg-typing {
+      font-style: italic;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 520px) {
+      .ai-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    html[data-theme="dark"] .ai-settings {
+      background: rgba(16, 31, 48, 0.9);
+      border-color: rgba(94, 234, 212, 0.18);
+    }
+
+    html[data-theme="dark"] .ai-field input,
+    html[data-theme="dark"] .ai-field select {
+      background: #0b1826;
+      border-color: rgba(148, 163, 184, 0.28);
+      color: #e6f0f7;
+    }
+
+    html[data-theme="dark"] .ai-settings-hint code {
+      background: rgba(13, 62, 60, 0.6);
+      color: #99f6e4;
+    }
+
     .assistant-note {
       margin-top: 0.6rem;
       font-size: 0.64rem;
@@ -3084,7 +3192,7 @@
         <div>
           <p class="eyebrow">Мини-помощник</p>
           <h2 id="faq-title" class="mt-1.5 text-2xl font-black tracking-[-0.035em] text-slate-900 sm:text-3xl">Спросите про аквариум</h2>
-          <p class="mt-1.5 max-w-2xl text-sm font-medium leading-6 text-slate-500">Отвечаю только по теме: рыбы, совместимость, объём, кормление, уход, болезни. Вопросы не по аквариуму игнорирую.</p>
+          <p class="mt-1.5 max-w-2xl text-sm font-medium leading-6 text-slate-500">По базе сайта отвечаю про рыб, объём и уход. Подключите ИИ ключом — и помощник начнёт отвечать на любые вопросы, не только про аквариум.</p>
         </div>
         <span class="result-badge">по базе сайта</span>
       </div>
@@ -3099,7 +3207,38 @@
             Спросить
           </button>
         </form>
-        <p class="assistant-note">Отвечаю по данным сайта: все виды базы, нормы объёма, кормление, оборудование и болезни. Не заменяет консультацию ветеринара.</p>
+        <details class="ai-settings" id="aiSettings">
+          <summary>Подключить ИИ — будет отвечать на любые вопросы</summary>
+          <div class="ai-settings-body">
+            <p class="ai-settings-hint">Ключ хранится только в этом браузере (localStorage) и никуда не отправляется, кроме выбранного API. Без ключа помощник отвечает по базе сайта.</p>
+            <div class="ai-grid">
+              <label class="ai-field">Провайдер
+                <select id="aiProvider">
+                  <option value="openrouter">OpenRouter</option>
+                  <option value="deepseek">DeepSeek</option>
+                  <option value="mistral">Mistral</option>
+                  <option value="custom">Свой адрес</option>
+                </select>
+              </label>
+              <label class="ai-field">Модель
+                <input id="aiModel" type="text" spellcheck="false" placeholder="openai/gpt-4o-mini">
+              </label>
+              <label class="ai-field ai-field-wide">Адрес API
+                <input id="aiBase" type="text" spellcheck="false" placeholder="https://openrouter.ai/api/v1">
+              </label>
+              <label class="ai-field ai-field-wide">API-ключ
+                <input id="aiKey" type="password" autocomplete="off" spellcheck="false" placeholder="sk-...">
+              </label>
+            </div>
+            <div class="ai-actions">
+              <button type="button" class="primary-small" id="aiSave">Сохранить</button>
+              <button type="button" class="secondary-small" id="aiClear">Удалить ключ</button>
+            </div>
+            <p class="ai-status" id="aiStatus">Сейчас: локальные ответы по базе сайта.</p>
+            <p class="ai-settings-hint">Ключ можно получить бесплатно: openrouter.ai → Keys. Для OpenRouter подойдёт бесплатная модель вида <code>meta-llama/llama-3.3-70b-instruct:free</code>.</p>
+          </div>
+        </details>
+        <p class="assistant-note">Без ключа отвечаю по данным сайта. С ключом — отвечаю на любые вопросы, включая общие. Не заменяет консультацию ветеринара.</p>
       </div>
     </section>
 
@@ -5959,26 +6098,191 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
           return '<strong>' + faq.q + '</strong><br>' + faq.short + '<span class="msg-note">' + faq.details + '</span>';
         }
 
-        return 'Я отвечаю только про аквариум: рыбы, совместимость, объём, кормление, оборудование, болезни. Спросите, например: «сколько неонов в 100 л?», «чем кормить гурами», «болезни петушка» или «сколько грунта».';
+        if (/как пользоваться|инструкц|как добавить|как подобрать|как сохранить|как работает сайт|что нажимать/.test(q)) {
+          return 'Коротко: 1) укажите объём аквариума, 2) добавьте текущих рыб кнопкой «Добавить рыбу», 3) добавьте планируемых, 4) нажмите «Подобрать население» и выставьте количество, 5) проверьте состав кнопкой «Проверить совместимость и объём».' +
+            '<span class="msg-note">Подробная инструкция — во вкладке «Инструкция».</span>';
+        }
+
+        return 'По базе сайта я отвечаю про аквариум: рыбы, совместимость, объём, кормление, оборудование, болезни. Спросите, например: «сколько неонов в 100 л?», «чем кормить гурами», «болезни петушка» или «сколько грунта».' +
+          '<span class="msg-note">Нужны ответы на любые вопросы — подключите ИИ ключом в блоке «Подключить ИИ» выше.</span>';
+      }
+
+      const AI_STORAGE_KEY = 'aquaNavigator.ai.v1';
+      const AI_PROVIDERS = {
+        openrouter: { base: 'https://openrouter.ai/api/v1', model: 'openai/gpt-4o-mini' },
+        deepseek: { base: 'https://api.deepseek.com', model: 'deepseek-chat' },
+        mistral: { base: 'https://api.mistral.ai/v1', model: 'mistral-small-latest' },
+        custom: { base: '', model: '' }
+      };
+      const AI_SYSTEM_PROMPT = 'Ты — помощник сайта «Аквариумный Навигатор». Отвечай на любые вопросы пользователя, но лучше всего разбираешься в аквариумистике: рыбы, улитки, совместимость, объём, кормление, оборудование, болезни. На вопросы про аквариум отвечай точно и по делу, на остальные — коротко и по существу. Пиши по-русски, простыми предложениями, без markdown-таблиц, не длиннее 8 предложений. Если не уверен — скажи об этом.';
+
+      let aiConfig = null;
+      let assistantHistory = [];
+
+      function readAiConfig() {
+        try {
+          const raw = readStorage(AI_STORAGE_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function renderAiStatus() {
+        const status = document.getElementById('aiStatus');
+        if (!status) return;
+        if (aiConfig && aiConfig.key) {
+          status.textContent = 'ИИ подключён: ' + aiConfig.provider + ' · ' + aiConfig.model + '. Отвечает на любые вопросы.';
+        } else {
+          status.textContent = 'Сейчас: локальные ответы по базе сайта.';
+        }
+      }
+
+      function fillAiFields() {
+        const providerEl = document.getElementById('aiProvider');
+        const baseEl = document.getElementById('aiBase');
+        const modelEl = document.getElementById('aiModel');
+        const keyEl = document.getElementById('aiKey');
+        if (!providerEl || !baseEl || !modelEl) return;
+
+        const config = aiConfig || {};
+        providerEl.value = config.provider || 'openrouter';
+        baseEl.value = config.base || AI_PROVIDERS[providerEl.value].base;
+        modelEl.value = config.model || AI_PROVIDERS[providerEl.value].model;
+        if (keyEl) keyEl.value = config.key || '';
+      }
+
+      function initAiSettings() {
+        aiConfig = readAiConfig();
+        fillAiFields();
+        renderAiStatus();
+
+        const providerEl = document.getElementById('aiProvider');
+        const baseEl = document.getElementById('aiBase');
+        const modelEl = document.getElementById('aiModel');
+        const keyEl = document.getElementById('aiKey');
+        const saveBtn = document.getElementById('aiSave');
+        const clearBtn = document.getElementById('aiClear');
+        if (!providerEl || !saveBtn) return;
+
+        providerEl.addEventListener('change', function () {
+          const preset = AI_PROVIDERS[providerEl.value] || AI_PROVIDERS.custom;
+          if (baseEl) baseEl.value = preset.base;
+          if (modelEl) modelEl.value = preset.model;
+        });
+
+        saveBtn.addEventListener('click', function () {
+          const provider = providerEl.value;
+          const base = (baseEl && baseEl.value.trim()) || AI_PROVIDERS[provider].base;
+          const model = (modelEl && modelEl.value.trim()) || AI_PROVIDERS[provider].model;
+          const key = keyEl ? keyEl.value.trim() : '';
+
+          if (!key) {
+            showToast('Вставьте API-ключ');
+            return;
+          }
+          if (!base || !model) {
+            showToast('Укажите адрес API и модель');
+            return;
+          }
+
+          aiConfig = { provider: provider, base: base, model: model, key: key };
+          writeStorage(AI_STORAGE_KEY, JSON.stringify(aiConfig));
+          renderAiStatus();
+          showToast('ИИ подключён — теперь отвечает на любые вопросы');
+        });
+
+        if (clearBtn) {
+          clearBtn.addEventListener('click', function () {
+            aiConfig = null;
+            writeStorage(AI_STORAGE_KEY, '');
+            if (keyEl) keyEl.value = '';
+            renderAiStatus();
+            showToast('Ключ удалён, снова локальные ответы');
+          });
+        }
+      }
+
+      function formatAiText(text) {
+        return escapeHTML(String(text || ''))
+          .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\n+/g, '<br>');
       }
 
       function assistantAppend(role, html) {
         const box = document.getElementById('assistantMessages');
-        if (!box) return;
+        if (!box) return null;
         const div = document.createElement('div');
         div.className = 'msg ' + (role === 'user' ? 'msg-user' : 'msg-bot');
         div.innerHTML = html;
         box.appendChild(div);
         box.scrollTop = box.scrollHeight;
+        return div;
+      }
+
+      async function askAi(question) {
+        const config = aiConfig;
+        if (!config || !config.key) return null;
+
+        const history = assistantHistory.slice(-8).map(function (item) {
+          return { role: item.role, content: item.text };
+        });
+
+        const response = await fetch(config.base.replace(/\/+$/, '') + '/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + config.key
+          },
+          body: JSON.stringify({
+            model: config.model,
+            messages: [{ role: 'system', content: AI_SYSTEM_PROMPT }].concat(history, [{ role: 'user', content: question }]),
+            temperature: 0.6,
+            max_tokens: 600
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('HTTP ' + response.status);
+        }
+
+        const data = await response.json();
+        const choice = data && data.choices && data.choices[0];
+        const text = choice && choice.message ? choice.message.content : '';
+        if (!text) throw new Error('empty answer');
+        return text;
       }
 
       function assistantAsk(text) {
         const value = String(text || '').trim();
         if (!value) return;
+
         assistantAppend('user', escapeHTML(value));
+        assistantHistory.push({ role: 'user', text: value });
+
+        if (aiConfig && aiConfig.key) {
+          const bubble = assistantAppend('bot', '<span class="msg-typing">Думаю…</span>');
+          askAi(value).then(function (answer) {
+            if (bubble) bubble.innerHTML = formatAiText(answer);
+            assistantHistory.push({ role: 'assistant', text: answer });
+            const box = document.getElementById('assistantMessages');
+            if (box) box.scrollTop = box.scrollHeight;
+          }).catch(function (error) {
+            const fallback = assistantAnswer(value);
+            if (bubble) {
+              bubble.innerHTML = '<strong>ИИ не ответил (' + escapeHTML(String(error.message || error)) + ').</strong><br>' +
+                'Проверьте ключ, модель и лимиты в личном кабинете провайдера.<br>' + fallback;
+            }
+          });
+          return;
+        }
+
         const answer = assistantAnswer(value);
         window.setTimeout(function () {
           assistantAppend('bot', answer);
+          assistantHistory.push({ role: 'assistant', text: String(answer).replace(/<[^>]+>/g, ' ') });
+          const box = document.getElementById('assistantMessages');
+          if (box) box.scrollTop = box.scrollHeight;
         }, 180);
       }
 
@@ -8028,6 +8332,7 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
       });
 
       initTheme();
+      initAiSettings();
       renderFaq();
 
       populateDatalist();
