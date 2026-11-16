@@ -3191,8 +3191,8 @@
       <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
           <p class="eyebrow">Мини-помощник</p>
-          <h2 id="faq-title" class="mt-1.5 text-2xl font-black tracking-[-0.035em] text-slate-900 sm:text-3xl">Спросите про аквариум</h2>
-          <p class="mt-1.5 max-w-2xl text-sm font-medium leading-6 text-slate-500">По базе сайта отвечаю про рыб, объём и уход. Подключите ИИ ключом — и помощник начнёт отвечать на любые вопросы, не только про аквариум.</p>
+          <h2 id="faq-title" class="mt-1.5 text-2xl font-black tracking-[-0.035em] text-slate-900 sm:text-3xl">Спросите что угодно</h2>
+          <p class="mt-1.5 max-w-2xl text-sm font-medium leading-6 text-slate-500">Про рыб, объём и уход отвечаю мгновенно по базе сайта, на остальные вопросы — через бесплатный ИИ. Ничего настраивать не нужно.</p>
         </div>
         <span class="result-badge">по базе сайта</span>
       </div>
@@ -3207,38 +3207,7 @@
             Спросить
           </button>
         </form>
-        <details class="ai-settings" id="aiSettings">
-          <summary>Подключить ИИ — будет отвечать на любые вопросы</summary>
-          <div class="ai-settings-body">
-            <p class="ai-settings-hint">Ключ хранится только в этом браузере (localStorage) и никуда не отправляется, кроме выбранного API. Без ключа помощник отвечает по базе сайта.</p>
-            <div class="ai-grid">
-              <label class="ai-field">Провайдер
-                <select id="aiProvider">
-                  <option value="openrouter">OpenRouter</option>
-                  <option value="deepseek">DeepSeek</option>
-                  <option value="mistral">Mistral</option>
-                  <option value="custom">Свой адрес</option>
-                </select>
-              </label>
-              <label class="ai-field">Модель
-                <input id="aiModel" type="text" spellcheck="false" placeholder="openai/gpt-4o-mini">
-              </label>
-              <label class="ai-field ai-field-wide">Адрес API
-                <input id="aiBase" type="text" spellcheck="false" placeholder="https://openrouter.ai/api/v1">
-              </label>
-              <label class="ai-field ai-field-wide">API-ключ
-                <input id="aiKey" type="password" autocomplete="off" spellcheck="false" placeholder="sk-...">
-              </label>
-            </div>
-            <div class="ai-actions">
-              <button type="button" class="primary-small" id="aiSave">Сохранить</button>
-              <button type="button" class="secondary-small" id="aiClear">Удалить ключ</button>
-            </div>
-            <p class="ai-status" id="aiStatus">Сейчас: локальные ответы по базе сайта.</p>
-            <p class="ai-settings-hint">Ключ можно получить бесплатно: openrouter.ai → Keys. Для OpenRouter подойдёт бесплатная модель вида <code>meta-llama/llama-3.3-70b-instruct:free</code>.</p>
-          </div>
-        </details>
-        <p class="assistant-note">Без ключа отвечаю по данным сайта. С ключом — отвечаю на любые вопросы, включая общие. Не заменяет консультацию ветеринара.</p>
+        <p class="assistant-note">Про аквариум отвечаю по базе сайта, на остальные вопросы — через бесплатный ИИ. Если ИИ занят, он попросит подождать около минуты. Не заменяет консультацию ветеринара.</p>
       </div>
     </section>
 
@@ -6089,119 +6058,20 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
           return 'Считаю не по «1 см на литр», а по слоям и взрослому размеру: 100 л — это 40–60 неонов, 3–4 скалярии или 1–2 золотые. Нажмите «Подобрать население» — подберу количество под ваш объём и список рыб.';
         }
 
-        const faq = FAQ_ITEMS.find(function (item) {
-          const words = assistantNormalize(item.q).split(/[^a-zа-я0-9]+/).filter(function (word) { return word.length > 4; });
-          return words.some(function (word) { return q.indexOf(word) !== -1; });
-        });
-
-        if (faq) {
-          return '<strong>' + faq.q + '</strong><br>' + faq.short + '<span class="msg-note">' + faq.details + '</span>';
-        }
-
         if (/как пользоваться|инструкц|как добавить|как подобрать|как сохранить|как работает сайт|что нажимать/.test(q)) {
           return 'Коротко: 1) укажите объём аквариума, 2) добавьте текущих рыб кнопкой «Добавить рыбу», 3) добавьте планируемых, 4) нажмите «Подобрать население» и выставьте количество, 5) проверьте состав кнопкой «Проверить совместимость и объём».' +
             '<span class="msg-note">Подробная инструкция — во вкладке «Инструкция».</span>';
         }
 
-        return 'По базе сайта я отвечаю про аквариум: рыбы, совместимость, объём, кормление, оборудование, болезни. Спросите, например: «сколько неонов в 100 л?», «чем кормить гурами», «болезни петушка» или «сколько грунта».' +
-          '<span class="msg-note">Нужны ответы на любые вопросы — подключите ИИ ключом в блоке «Подключить ИИ» выше.</span>';
+        return 'По базе сайта я отвечаю про аквариум: рыбы, совместимость, объём, кормление, оборудование, болезни. Спросите, например: «сколько неонов в 100 л?», «чем кормить гурами», «болезни петушка» или «сколько грунта».';
       }
 
-      const AI_STORAGE_KEY = 'aquaNavigator.ai.v1';
-      const AI_PROVIDERS = {
-        openrouter: { base: 'https://openrouter.ai/api/v1', model: 'openai/gpt-4o-mini' },
-        deepseek: { base: 'https://api.deepseek.com', model: 'deepseek-chat' },
-        mistral: { base: 'https://api.mistral.ai/v1', model: 'mistral-small-latest' },
-        custom: { base: '', model: '' }
-      };
-      const AI_SYSTEM_PROMPT = 'Ты — помощник сайта «Аквариумный Навигатор». Отвечай на любые вопросы пользователя, но лучше всего разбираешься в аквариумистике: рыбы, улитки, совместимость, объём, кормление, оборудование, болезни. На вопросы про аквариум отвечай точно и по делу, на остальные — коротко и по существу. Пиши по-русски, простыми предложениями, без markdown-таблиц, не длиннее 8 предложений. Если не уверен — скажи об этом.';
+      const AI_ENDPOINT = 'https://text.pollinations.ai/openai';
+      const AI_SYSTEM_PROMPT = 'Ты — помощник сайта «Аквариумный Навигатор» про аквариум и рыб. Отвечай на любые вопросы пользователя: на вопросы про аквариум — точно и по делу, на остальные — коротко и по существу. Пиши по-русски, простыми предложениями, без markdown-таблиц, не длиннее 8 предложений. Если не уверен — скажи об этом.';
+      const AI_STOP_MARKER = 'По базе сайта я отвечаю про аквариум';
 
-      let aiConfig = null;
       let assistantHistory = [];
-
-      function readAiConfig() {
-        try {
-          const raw = readStorage(AI_STORAGE_KEY);
-          return raw ? JSON.parse(raw) : null;
-        } catch (error) {
-          return null;
-        }
-      }
-
-      function renderAiStatus() {
-        const status = document.getElementById('aiStatus');
-        if (!status) return;
-        if (aiConfig && aiConfig.key) {
-          status.textContent = 'ИИ подключён: ' + aiConfig.provider + ' · ' + aiConfig.model + '. Отвечает на любые вопросы.';
-        } else {
-          status.textContent = 'Сейчас: локальные ответы по базе сайта.';
-        }
-      }
-
-      function fillAiFields() {
-        const providerEl = document.getElementById('aiProvider');
-        const baseEl = document.getElementById('aiBase');
-        const modelEl = document.getElementById('aiModel');
-        const keyEl = document.getElementById('aiKey');
-        if (!providerEl || !baseEl || !modelEl) return;
-
-        const config = aiConfig || {};
-        providerEl.value = config.provider || 'openrouter';
-        baseEl.value = config.base || AI_PROVIDERS[providerEl.value].base;
-        modelEl.value = config.model || AI_PROVIDERS[providerEl.value].model;
-        if (keyEl) keyEl.value = config.key || '';
-      }
-
-      function initAiSettings() {
-        aiConfig = readAiConfig();
-        fillAiFields();
-        renderAiStatus();
-
-        const providerEl = document.getElementById('aiProvider');
-        const baseEl = document.getElementById('aiBase');
-        const modelEl = document.getElementById('aiModel');
-        const keyEl = document.getElementById('aiKey');
-        const saveBtn = document.getElementById('aiSave');
-        const clearBtn = document.getElementById('aiClear');
-        if (!providerEl || !saveBtn) return;
-
-        providerEl.addEventListener('change', function () {
-          const preset = AI_PROVIDERS[providerEl.value] || AI_PROVIDERS.custom;
-          if (baseEl) baseEl.value = preset.base;
-          if (modelEl) modelEl.value = preset.model;
-        });
-
-        saveBtn.addEventListener('click', function () {
-          const provider = providerEl.value;
-          const base = (baseEl && baseEl.value.trim()) || AI_PROVIDERS[provider].base;
-          const model = (modelEl && modelEl.value.trim()) || AI_PROVIDERS[provider].model;
-          const key = keyEl ? keyEl.value.trim() : '';
-
-          if (!key) {
-            showToast('Вставьте API-ключ');
-            return;
-          }
-          if (!base || !model) {
-            showToast('Укажите адрес API и модель');
-            return;
-          }
-
-          aiConfig = { provider: provider, base: base, model: model, key: key };
-          writeStorage(AI_STORAGE_KEY, JSON.stringify(aiConfig));
-          renderAiStatus();
-          showToast('ИИ подключён — теперь отвечает на любые вопросы');
-        });
-
-        if (clearBtn) {
-          clearBtn.addEventListener('click', function () {
-            aiConfig = null;
-            writeStorage(AI_STORAGE_KEY, '');
-            if (keyEl) keyEl.value = '';
-            renderAiStatus();
-            showToast('Ключ удалён, снова локальные ответы');
-          });
-        }
-      }
+      let aiBusy = false;
 
       function formatAiText(text) {
         return escapeHTML(String(text || ''))
@@ -6220,70 +6090,104 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
         return div;
       }
 
-      async function askAi(question) {
-        const config = aiConfig;
-        if (!config || !config.key) return null;
+      function parseRetrySeconds(message) {
+        const match = String(message || '').match(/(?:wait|Retry after)\s*(\d+)/i);
+        return match ? Number(match[1]) : 45;
+      }
 
-        const history = assistantHistory.slice(-8).map(function (item) {
+      async function askFreeAi(question) {
+        const history = assistantHistory.slice(-6).map(function (item) {
           return { role: item.role, content: item.text };
         });
 
-        const response = await fetch(config.base.replace(/\/+$/, '') + '/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + config.key
-          },
-          body: JSON.stringify({
-            model: config.model,
-            messages: [{ role: 'system', content: AI_SYSTEM_PROMPT }].concat(history, [{ role: 'user', content: question }]),
-            temperature: 0.6,
-            max_tokens: 600
-          })
-        });
+        const controller = new AbortController();
+        const timer = window.setTimeout(function () {
+          controller.abort();
+        }, 30000);
 
-        if (!response.ok) {
-          throw new Error('HTTP ' + response.status);
+        let response;
+        try {
+          response = await fetch(AI_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            signal: controller.signal,
+            body: JSON.stringify({
+              model: 'openai',
+              referrer: 'aquarium-navigator',
+              messages: [{ role: 'system', content: AI_SYSTEM_PROMPT }].concat(history, [{ role: 'user', content: question }])
+            })
+          });
+        } finally {
+          window.clearTimeout(timer);
         }
 
-        const data = await response.json();
+        const raw = await response.text();
+
+        if (!response.ok) {
+          const error = new Error(raw);
+          error.status = response.status;
+          error.retry = parseRetrySeconds(raw);
+          throw error;
+        }
+
+        let data = null;
+        try {
+          data = JSON.parse(raw);
+        } catch (error) {
+          return raw.trim();
+        }
+
         const choice = data && data.choices && data.choices[0];
         const text = choice && choice.message ? choice.message.content : '';
-        if (!text) throw new Error('empty answer');
-        return text;
+        return text || raw.trim();
+      }
+
+      function assistantScroll() {
+        const box = document.getElementById('assistantMessages');
+        if (box) box.scrollTop = box.scrollHeight;
       }
 
       function assistantAsk(text) {
         const value = String(text || '').trim();
-        if (!value) return;
+        if (!value || aiBusy) return;
 
         assistantAppend('user', escapeHTML(value));
-        assistantHistory.push({ role: 'user', text: value });
 
-        if (aiConfig && aiConfig.key) {
-          const bubble = assistantAppend('bot', '<span class="msg-typing">Думаю…</span>');
-          askAi(value).then(function (answer) {
-            if (bubble) bubble.innerHTML = formatAiText(answer);
-            assistantHistory.push({ role: 'assistant', text: answer });
-            const box = document.getElementById('assistantMessages');
-            if (box) box.scrollTop = box.scrollHeight;
-          }).catch(function (error) {
-            const fallback = assistantAnswer(value);
-            if (bubble) {
-              bubble.innerHTML = '<strong>ИИ не ответил (' + escapeHTML(String(error.message || error)) + ').</strong><br>' +
-                'Проверьте ключ, модель и лимиты в личном кабинете провайдера.<br>' + fallback;
-            }
-          });
+        const localAnswer = assistantAnswer(value);
+        const localKnown = localAnswer.indexOf(AI_STOP_MARKER) !== 0;
+
+        if (localKnown) {
+          assistantHistory.push({ role: 'user', text: value });
+          window.setTimeout(function () {
+            assistantAppend('bot', localAnswer);
+            assistantHistory.push({ role: 'assistant', text: String(localAnswer).replace(/<[^>]+>/g, ' ') });
+            assistantScroll();
+          }, 150);
           return;
         }
 
-        const answer = assistantAnswer(value);
-        window.setTimeout(function () {
-          assistantAppend('bot', answer);
-          assistantHistory.push({ role: 'assistant', text: String(answer).replace(/<[^>]+>/g, ' ') });
-          const box = document.getElementById('assistantMessages');
-          if (box) box.scrollTop = box.scrollHeight;
-        }, 180);
+        aiBusy = true;
+        const bubble = assistantAppend('bot', '<span class="msg-typing">Печатаю…</span>');
+
+        askFreeAi(value).then(function (answer) {
+          if (bubble) bubble.innerHTML = formatAiText(answer);
+          assistantHistory.push({ role: 'user', text: value });
+          assistantHistory.push({ role: 'assistant', text: answer });
+          assistantScroll();
+        }).catch(function (error) {
+          const wait = error && error.retry ? error.retry : 45;
+          const limited = error && (error.status === 402 || error.status === 429);
+          if (bubble) {
+            bubble.innerHTML = '<strong>Не получилось ответить.</strong> ' +
+              (limited
+                ? 'Бесплатный ИИ отвечает раз в ' + wait + ' секунд — подождите и спросите снова.'
+                : 'Проверьте интернет и попробуйте ещё раз.') +
+              '<span class="msg-note">А по аквариуму я отвечаю сразу: «сколько неонов в 100 л», «болезни петушка», «сколько грунта», «как пользоваться сайтом».</span>';
+          }
+          assistantScroll();
+        }).then(function () {
+          aiBusy = false;
+        });
       }
 
       function renderFaq() {
@@ -8332,7 +8236,6 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
       });
 
       initTheme();
-      initAiSettings();
       renderFaq();
 
       populateDatalist();
