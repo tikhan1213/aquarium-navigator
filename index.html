@@ -2707,6 +2707,7 @@
       <button type="button" class="tab-button" data-tab="feed" aria-selected="false">Кормление</button>
       <button type="button" class="tab-button" data-tab="care" aria-selected="false">Обслуживание</button>
       <button type="button" class="tab-button" data-tab="faq" aria-selected="false">Помощник</button>
+      <button type="button" class="tab-button" data-tab="guide" aria-selected="false">Инструкция</button>
       <span class="tab-spacer" aria-hidden="true"></span>
       <button type="button" id="themeToggle" class="theme-toggle" aria-pressed="false">
         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5Z" stroke-linejoin="round"></path></svg>
@@ -3098,7 +3099,69 @@
             Спросить
           </button>
         </form>
-        <p class="assistant-note">Отвечаю по данным сайта: 153 вида, нормы объёма, кормление, оборудование и болезни. Не заменяет консультацию ветеринара.</p>
+        <p class="assistant-note">Отвечаю по данным сайта: все виды базы, нормы объёма, кормление, оборудование и болезни. Не заменяет консультацию ветеринара.</p>
+      </div>
+    </section>
+
+    <section id="tabGuide" class="tab-panel" hidden aria-labelledby="guide-title">
+      <div class="mb-4">
+        <p class="eyebrow">Инструкция</p>
+        <h2 id="guide-title" class="mt-1.5 text-2xl font-black tracking-[-0.035em] text-slate-900 sm:text-3xl">Как пользоваться сайтом</h2>
+        <p class="mt-1.5 max-w-3xl text-sm font-medium leading-6 text-slate-500">Полный цикл за четыре шага: указать объём, добавить рыб, подобрать количество, проверить состав. Ниже — что где находится и что нажимать.</p>
+      </div>
+
+      <div class="grid gap-4 lg:grid-cols-2">
+        <article class="info-card">
+          <h3>Быстрый старт</h3>
+          <ol class="info-list">
+            <li><span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-teal-100 text-[0.62rem] font-black text-teal-700">1</span><span><strong>Укажите объём</strong> аквариума в шаге 1 или нажмите быстрый выбор (30 / 60 / 100 / 200 л).</span></li>
+            <li><span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-teal-100 text-[0.62rem] font-black text-teal-700">2</span><span><strong>Добавьте текущих рыб</strong> — кнопка «Добавить рыбу» в шаге 2. Здесь же вручную задаётся количество.</span></li>
+            <li><span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-sky-100 text-[0.62rem] font-black text-sky-700">3</span><span><strong>Добавьте планируемых</strong> — кнопка «Добавить рыбу» в шаге 3. Количество пока не нужно.</span></li>
+            <li><span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-indigo-100 text-[0.62rem] font-black text-indigo-700">4</span><span><strong>Нажмите «Подобрать население»</strong> — выставьте количество стрелками или впишите число, затем «Применить к плану».</span></li>
+            <li><span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-rose-100 text-[0.62rem] font-black text-rose-700">5</span><span><strong>Проверьте состав</strong> кнопкой «Проверить совместимость и объём» — получите литраж, конфликты, нюансы и рекомендации.</span></li>
+          </ol>
+        </article>
+
+        <article class="info-card">
+          <h3>Что где находится</h3>
+          <ul class="info-list">
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500"></span><span><strong>Каталог рыб</strong> — все виды с карточками: нажмите на название, чтобы посмотреть фото-иллюстрацию, температуру, слой и болезни.</span></li>
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500"></span><span><strong>Мои планы</strong> — сохранить состав, закрепить главный план и вернуться к нему позже.</span></li>
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500"></span><span><strong>Сбросить</strong> — очистить состав одной кнопкой; повторное нажатие в течение 10 секунд вернёт всё обратно.</span></li>
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500"></span><span><strong>Кормление</strong> — сколько корма в чайных ложках, кто как ест и график.</span></li>
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500"></span><span><strong>Обслуживание</strong> — температура, оборудование, грунт и подмены под ваш объём.</span></li>
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500"></span><span><strong>Помощник</strong> — вопросы про рыб, болезни, кормление. Работает только по аквариуму.</span></li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="mt-4 grid gap-4 lg:grid-cols-2">
+        <article class="info-card">
+          <h3>Как читать результат</h3>
+          <ul class="info-list">
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500"></span><span><strong>Объём</strong> — «требуется» против «в аквариуме»: зелёный вердикт значит, что места хватает.</span></li>
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500"></span><span><strong>Слои</strong> — дно, средний и верхний: сомики не отнимают место у неонов, но слои перекрываются.</span></li>
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500"></span><span><strong>Совместимость</strong> — красные карточки это конфликты, синие — нюансы (стайность, территория, температура).</span></li>
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500"></span><span><strong>Рекомендации</strong> — мирные виды, которые поместятся; кнопка «В план» добавляет их сразу.</span></li>
+          </ul>
+        </article>
+
+        <article class="info-card">
+          <h3>Частые ошибки новичка</h3>
+          <ul class="info-list">
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500"></span><span>Считать объём по размеру малька — рыба вырастет в 2–3 раза. Сайт считает по подросткам, но оставляйте запас.</span></li>
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500"></span><span>Запускать всех рыб сразу — фильтр не успевает созреть, начинается аммиак.</span></li>
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500"></span><span>Кормить «на глаз» — используйте порцию в чайных ложках из вкладки «Кормление».</span></li>
+            <li><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500"></span><span>Смешивать холодноводных и тропических — калькулятор покажет конфликт температур.</span></li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-2">
+        <button type="button" class="primary-small" data-goto-tab="calc">Перейти к калькулятору</button>
+        <button type="button" class="secondary-small" data-goto-tab="feed">Кормление</button>
+        <button type="button" class="secondary-small" data-goto-tab="care">Обслуживание</button>
+        <button type="button" class="secondary-small" data-goto-tab="faq">Помощник</button>
       </div>
     </section>
 
@@ -3484,6 +3547,7 @@
         coldwater: 'Холодноводные',
         exotic: 'Экзотика и хищники',
         killifish: 'Карпозубые',
+        snails: 'Улитки',
         other: 'Другие виды'
       };
 
@@ -3644,6 +3708,25 @@ gardneri_killi|Килли Гарднера|3|peaceful|tropical|22|26|2|40|6|kill
 golden_wonder_killi|Килли золотая|3|semi|tropical|22|28|2|40|8|killifish|#facc15|Золотистый килли с активным поведением.
 clown_killi|Килли-клоун|2|peaceful|tropical|22|26|4|30|4|killifish|#f97316|Мелкий полосатый килли для видового аквариума.
 blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|#3b82f6|Сине-полосатый килли, любит плавающие растения.
+ampullaria|Ампулярия|3|peaceful|tropical|22|28|1|30|6|snails|#f59e0b|Крупная улитка с яркой раковиной, хорошо чистит стёкла и грунт.
+nerite|Неритина|2|peaceful|tropical|22|27|1|20|2.5|snails|#facc15|Улитка с полосатым панцирем, почти не размножается в пресной воде.
+ramshorn|Катушка роговая|1|peaceful|tropical|20|28|1|10|2|snails|#ef4444|Небольшая улитка-санитар, быстро размножается при перекорме.
+malaysian_trumpet|Мелания|0.8|peaceful|tropical|22|28|1|10|2|snails|#a3e635|Живёт в грунте и рыхлит его, выходит на кормёжку ночью.
+physa|Физа|0.8|peaceful|temperate|18|26|1|10|1.5|snails|#94a3b8|Мелкая улитка с левозакрученной раковиной, любит плавающие растения.
+helena|Хелена|2|semi|tropical|22|26|1|20|2|snails|#f97316|Хищная улитка: охотится на других улиток, держит их численность под контролем.
+tylomelania|Тиломелания|4|peaceful|tropical|24|28|1|40|8|snails|#fbbf24|Крупная улитка с фактурной раковиной, любит мягкий грунт.
+gold_inca|Золотая инка|3|peaceful|tropical|22|26|1|40|5|snails|#fde047|Аккуратная улитка с золотистым панцирем для травника.
+glofish_ternetia|Тернеция Глофиш|2|peaceful|tropical|22|28|5|40|4|tetras|#22d3ee|Яркая светящаяся форма тернеции, заметная в любом аквариуме.
+schuberti_barb|Барбус Шуберта|3|semi|tropical|22|26|5|60|6|barbs|#f43f5e|Полосатый барбус с красными плавниками, любит стаю и течение.
+copper_tetra|Тетра медная|1.5|peaceful|tropical|23|27|6|40|3.5|tetras|#fb923c|Небольшая медная тетра для спокойного сообщества.
+amanda_tetra|Тетра Аманды|1.5|peaceful|tropical|23|27|6|40|3|tetras|#f472b6|Миниатюрная тетра с неоновым блеском.
+marble_gourami|Гурами мраморный|6|semi|tropical|24|28|1|80|12|labyrinth|#64748b|Крупный гурами с мраморным рисунком, может быть территориальным.
+lalius|Лялиус|4|peaceful|tropical|24|28|1|40|6|labyrinth|#38bdf8|Мирный лабиринтовый вид с сине-красным рисунком.
+hoplo_catfish|Таракатум|10|peaceful|tropical|24|28|1|100|15|catfish|#78350f|Крупный донный сомик с бронзовым телом и усами.
+loricaria|Лорикария|6|peaceful|tropical|24|28|1|60|12|catfish|#a16207|Вытянутый сомик-прилипала, любит течение и коряги.
+bloodfin_tetra|Тетра светлячок|1.5|peaceful|temperate|20|26|6|50|4|tetras|#f87171|Красноплавниковая тетра, переносит прохладную воду.
+boesemani_rainbow|Радужница Боэсмана|8|peaceful|tropical|24|28|1|150|10|rainbows|#0ea5e9|Крупная радужница с сине-оранжевым переливом.
+red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|150|12|exotic|#dc2626|Территориальный «акулий» вид, гоняет похожих рыб.
       `.trim();
 
       const FISH_DEFAULTS = {
@@ -3725,7 +3808,12 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         ['ternetia', 'goldfish', 'Тернеции нужна тёплая вода, а золотой рыбке — прохладная.'],
         ['barbus', 'goldfish', 'Барбусы теплолюбивы, а золотые рыбки — холодноводные.'],
         ['angelfish', 'goldfish', 'Скалярии теплолюбивы, а золотые рыбки — холодноводные.'],
-        ['molly', 'betta', 'Моллинезии бывают слишком активны и могут задирать петушка.']
+        ['molly', 'betta', 'Моллинезии бывают слишком активны и могут задирать петушка.'],
+        ['helena', 'ampullaria', 'Хелена — хищная улитка: она охотится на ампулярий и других крупных улиток.'],
+        ['helena', 'nerite', 'Хелена нападает на неритин — держите их отдельно или с плотной раковиной.'],
+        ['helena', 'ramshorn', 'Хелена питается катушками — это способ контроля, но не соседство.'],
+        ['helena', 'malaysian_trumpet', 'Хелена охотится на меланий, если те выходят на поверхность грунта.'],
+        ['helena', 'tylomelania', 'Хелена может нападать на тиломеланий — держите их раздельно.']
       ];
 
       CONFLICT_PAIRS.forEach(function (pair) {
@@ -4397,7 +4485,7 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         if (BOTTOM_IDS.has(fish.id)) return 'bottom';
         if (TOP_IDS.has(fish.id)) return 'top';
         const category = fish.category || 'other';
-        if (category === 'catfish' || category === 'loaches') return 'bottom';
+        if (category === 'catfish' || category === 'loaches' || category === 'snails') return 'bottom';
         return 'mid';
       }
 
@@ -4415,6 +4503,7 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         loaches: 3,
         coldwater: 6,
         exotic: 5,
+        snails: 2,
         other: 3
       };
 
@@ -5258,7 +5347,7 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
           button.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
 
-        const panels = { calc: 'tabCalc', feed: 'tabFeed', care: 'tabCare', faq: 'tabFaq' };
+        const panels = { calc: 'tabCalc', feed: 'tabFeed', care: 'tabCare', faq: 'tabFaq', guide: 'tabGuide' };
         Object.keys(panels).forEach(function (key) {
           const panel = document.getElementById(panels[key]);
           if (panel) panel.hidden = key !== tab;
@@ -5391,7 +5480,10 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
           let foodType = 'хлопья или мелкие гранулы';
           let place = 'в толще воды';
 
-          if (layer === 'bottom') {
+          if (fish.category === 'snails') {
+            foodType = 'водоросли, остатки корма, спирулина';
+            place = 'со стёкол, грунта и дна';
+          } else if (layer === 'bottom') {
             foodType = 'тонущие таблетки';
             place = 'со дна, после выключения света';
           } else if (fish.predator || fish.size >= 14) {
@@ -7105,6 +7197,14 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
       }
 
       function fishDiseases(fish) {
+        if (fish.category === 'snails') {
+          return [
+            { name: 'Разрушение раковины', sign: 'белые пятна, трещины и тонкий завиток', action: 'проверить pH и жёсткость воды, добавить минеральный блок или раковину, регулярные подмены' },
+            { name: 'Паразиты и сосальщики', sign: 'точки на теле, улитка вялая и не выходит на корм', action: 'карантин, солевые ванны по схеме; не запускать сразу в общий аквариум' },
+            { name: 'Нехватка кальция', sign: 'раковина светлеет, не растёт, края крошатся', action: 'кормить овощами и спирулиной, добавить кальций в воду или раковину-минерал' }
+          ];
+        }
+
         const list = [];
         const seen = new Set();
 
@@ -7188,6 +7288,7 @@ blue_killi|Килли голубой|3|peaceful|tropical|22|26|2|40|5|killifish|
         const groupText = fish.group > 1 ? 'стайка от ' + fish.group : 'пара или одиночка';
 
         let feeding = 'Сухой корм: хлопья или мелкие гранулы, порция на 2–3 минуты.';
+        if (fish.category === 'snails') feeding = 'Питается водорослями и остатками корма. Добавьте спирулину, ошпаренный кабачок 1–2 раза в неделю и кальций для раковины.';
         if (layerOf(fish) === 'bottom') feeding = 'Кормить тонущими таблетками после выключения света, чтобы верхние рыбы не съели корм.';
         if (fish.predator || fish.size >= 14) feeding = 'Крупные гранулы или замороженный корм 2–3 раза в неделю, порция по размеру пасти.';
         if (['ancistrus', 'pleco', 'bristlenose', 'otocinclus'].indexOf(fish.id) !== -1) feeding = 'Нужна растительная подкормка: спирулина, вафли или ошпаренный кабачок 1–2 раза в неделю.';
