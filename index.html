@@ -6169,24 +6169,43 @@ red_tailed_shark|Лабео двуцветный|8|aggressive|tropical|22|27|1|1
         aiBusy = true;
         const bubble = assistantAppend('bot', '<span class="msg-typing">Печатаю…</span>');
 
-        askFreeAi(value).then(function (answer) {
+        function finish(answer) {
           if (bubble) bubble.innerHTML = formatAiText(answer);
           assistantHistory.push({ role: 'user', text: value });
           assistantHistory.push({ role: 'assistant', text: answer });
           assistantScroll();
-        }).catch(function (error) {
+          aiBusy = false;
+        }
+
+        function fail(error, retried) {
           const wait = error && error.retry ? error.retry : 45;
           const limited = error && (error.status === 402 || error.status === 429);
+
+          if (limited && !retried && wait <= 60) {
+            if (bubble) {
+              bubble.innerHTML = '<span class="msg-typing">Бесплатный ИИ занят — подожду ' + wait + ' секунд и отвечу автоматически…</span>';
+            }
+            window.setTimeout(function () {
+              askFreeAi(value).then(finish).catch(function (secondError) {
+                fail(secondError, true);
+              });
+            }, (wait + 1) * 1000);
+            return;
+          }
+
           if (bubble) {
             bubble.innerHTML = '<strong>Не получилось ответить.</strong> ' +
               (limited
-                ? 'Бесплатный ИИ отвечает раз в ' + wait + ' секунд — подождите и спросите снова.'
+                ? 'Лимит бесплатного ИИ — одна реплика в ' + wait + ' секунд. Спросите чуть позже.'
                 : 'Проверьте интернет и попробуйте ещё раз.') +
               '<span class="msg-note">А по аквариуму я отвечаю сразу: «сколько неонов в 100 л», «болезни петушка», «сколько грунта», «как пользоваться сайтом».</span>';
           }
           assistantScroll();
-        }).then(function () {
           aiBusy = false;
+        }
+
+        askFreeAi(value).then(finish).catch(function (error) {
+          fail(error, false);
         });
       }
 
